@@ -1,0 +1,22 @@
+{
+  "general": {
+    "highQuality": true,
+    "designResolution": {
+      "fitWidth": false,
+      "fitHeight": true,
+      "height": 1334,
+      "width": 750
+    }
+  },
+  "__version__": "1.0.6",
+  "fbx": {
+    "legacyFbxImporter": {
+      "visible": true
+    }
+  },
+  "script": {
+    "preserveSymlinks": true
+  },
+  "layer": [],
+  "custom_joint_texture_layouts": []
+}

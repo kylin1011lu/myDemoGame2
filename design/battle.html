@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏竞技平台 - 对战页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0f172a; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .prize-card {
+            transition: all 0.3s ease;
+        }
+        .prize-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="p-6 flex gap-8 overflow-x-auto">
+    <!-- 对战页面 -->
+    <div class="w-[375px] h-[812px] rounded-3xl bg-slate-900 overflow-hidden flex flex-col relative shadow-2xl">
+        <!-- 顶部状态栏 -->
+        <div class="glass-effect p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">Z</div>
+                <span class="text-white font-bold">33</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-white">$0.00</div>
+                <img src="https://unpkg.com/lucide-static@latest/icons/dollar-sign.svg" class="w-6 h-6 text-green-500">
+            </div>
+        </div>
+
+        <!-- 对战类型选择器 -->
+        <div class="p-6">
+            <div class="flex items-center gap-4 mb-6">
+                <h2 class="text-xl font-bold text-white">对战</h2>
+                <div class="flex-1"></div>
+                <button class="text-gray-400">查看更多</button>
+            </div>
+
+            <!-- 比赛卡片列表 -->
+            <div class="space-y-4">
+                <!-- 新手赛 -->
+                <div class="glass-effect rounded-xl p-4 prize-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center text-white font-bold">$1</div>
+                            <div>
+                                <h3 class="text-white font-bold">新手赛</h3>
+                                <p class="text-gray-400 text-sm">全部棋盘类型</p>
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            入场费: $0.60
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-4 h-4 text-gray-400">
+                            <span class="text-gray-400">2人</span>
+                        </div>
+                        <button class="bg-green-500 text-white px-6 py-2 rounded-lg font-medium">开始</button>
+                    </div>
+                </div>
+
+                <!-- 专业赛 -->
+                <div class="glass-effect rounded-xl p-4 prize-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg bg-green-600 flex items-center justify-center text-white font-bold">$5</div>
+                            <div>
+                                <h3 class="text-white font-bold">专业赛</h3>
+                                <p class="text-gray-400 text-sm">全部棋盘类型</p>
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            入场费: $3
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-4 h-4 text-gray-400">
+                            <span class="text-gray-400">2人</span>
+                        </div>
+                        <button class="bg-green-600 text-white px-6 py-2 rounded-lg font-medium">开始</button>
+                    </div>
+                </div>
+
+                <!-- MVP赛 -->
+                <div class="glass-effect rounded-xl p-4 prize-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg bg-green-700 flex items-center justify-center text-white font-bold">$10</div>
+                            <div>
+                                <h3 class="text-white font-bold">MVP赛</h3>
+                                <p class="text-gray-400 text-sm">全部棋盘类型</p>
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            入场费: $6
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-4 h-4 text-gray-400">
+                            <span class="text-gray-400">2人</span>
+                        </div>
+                        <button class="bg-green-700 text-white px-6 py-2 rounded-lg font-medium">开始</button>
+                    </div>
+                </div>
+
+                <!-- 练习赛 -->
+                <div class="glass-effect rounded-xl p-4 prize-card">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold">Z15</div>
+                            <div>
+                                <h3 class="text-white font-bold">扫雷杯</h3>
+                                <p class="text-gray-400 text-sm">24小时制</p>
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            入场费: Z5
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" class="w-4 h-4 text-gray-400">
+                            <span class="text-gray-400">4人</span>
+                        </div>
+                        <button class="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium">开始</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="glass-effect p-4 mt-auto flex justify-around items-center">
+            <a href="#" class="flex flex-col items-center gap-1">
+                <img src="https://unpkg.com/lucide-static@latest/icons/layout-dashboard.svg" class="w-6 h-6 text-gray-400">
+                <span class="text-xs text-gray-400">主页</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1">
+                <img src="https://unpkg.com/lucide-static@latest/icons/trophy.svg" class="w-6 h-6 text-gray-400">
+                <span class="text-xs text-gray-400">排行</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1">
+                <img src="https://unpkg.com/lucide-static@latest/icons/swords.svg" class="w-6 h-6 text-blue-500">
+                <span class="text-xs text-blue-500">对战</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1">
+                <img src="https://unpkg.com/lucide-static@latest/icons/shopping-bag.svg" class="w-6 h-6 text-gray-400">
+                <span class="text-xs text-gray-400">商店</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1">
+                <img src="https://unpkg.com/lucide-static@latest/icons/user.svg" class="w-6 h-6 text-gray-400">
+                <span class="text-xs text-gray-400">我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
