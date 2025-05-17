@@ -95,27 +95,10 @@ const StoryEditor: React.FC = () => {
         let y = 0
         const VERTICAL_SPACING = 200
         const HORIZONTAL_CENTER = 0
-        const CHOICE_X_SPACING = 260
-        const CHOICE_Y_OFFSET = 100
         const nodePos: Record<string, {x: number, y: number}> = {}
         json.scenes[0].nodes.forEach((node, idx) => {
           nodePos[node.node_id] = { x: HORIZONTAL_CENTER, y }
           y += VERTICAL_SPACING
-        })
-        // 记录choice节点的布局
-        const choiceNodePos: Record<string, {x: number, y: number}> = {}
-        json.scenes[0].nodes.forEach((node, idx) => {
-          if (node.node_type === 'PLAYER_CHOICE' && node.choices && node.choices.length > 0) {
-            const baseY = (nodePos[node.node_id]?.y ?? 0) + CHOICE_Y_OFFSET
-            const total = node.choices.length
-            node.choices.forEach((choice, cidx) => {
-              const choiceNodeId = `${node.node_id}_CHOICE_${cidx}`
-              choiceNodePos[choiceNodeId] = {
-                x: HORIZONTAL_CENTER + (cidx - (total - 1) / 2) * CHOICE_X_SPACING,
-                y: baseY
-              }
-            })
-          }
         })
 
         json.scenes[0].nodes.forEach((node: StoryNodeType) => {
