@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <title>Scene1 节点数据流可视化</title>
+  <script type="text/javascript" src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
+  <link href="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+  <style>
+    #mynetwork {
+      width: 100vw;
+      height: 90vh;
+      border: 1px solid lightgray;
+      background: #fafbfc;
+    }
+    .vis-network {
+      background: #fafbfc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Scene1 节点数据流可视化</h2>
+  <div id="mynetwork"></div>
+  <input type="file" id="fileInput" accept="application/json" style="margin-top:10px;" />
+  <span>（可手动加载 scene1.json 文件）</span>
+  <script>
+    // 默认尝试加载本地 scene1.json
+    fetch('./data/scene1.json')
+      .then(res => res.json())
+      .then(data => renderScene(data))
+      .catch(() => {});
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const data = JSON.parse(evt.target.result);
+          renderScene(data);
+        } catch (err) {
+          alert('JSON 解析失败');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    function renderScene(data) {
+      const nodes = [];
+      const edges = [];
+      const nodeMap = {};
+      // 只展示第一个 scene
+      const scene = data.scenes[0];
+      scene.nodes.forEach((node, idx) => {
+        let label = `[${node.node_type}]\n${node.node_id}`;
+        if (node.content) {
+          label += '\n' + node.content.join('\n');
+        } else if (node.content_template) {
+          label += '\n' + node.content_template;
+        } else if (node.prompt) {
+          label += '\n' + node.prompt;
+        }
+        nodes.push({
+          id: node.node_id,
+          label,
+          shape: 'box',
+          color: getNodeColor(node.node_type)
+        });
+        nodeMap[node.node_id] = node;
+      });
+      // 连线
+      scene.nodes.forEach(node => {
+        if (node.node_type === 'PLAYER_CHOICE' && node.choices) {
+          node.choices.forEach(choice => {
+            edges.push({
+              from: node.node_id,
+              to: choice.next_node_id,
+              label: choice.text,
+              arrows: 'to',
+              color: { color: '#007bff' }
+            });
+          });
+        } else if (node.next_node_id) {
+          edges.push({
+            from: node.node_id,
+            to: node.next_node_id,
+            arrows: 'to',
+            color: { color: '#aaa' }
+          });
+        }
+      });
+      const container = document.getElementById('mynetwork');
+      const dataSet = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+      const options = {
+        layout: { hierarchical: { enabled: true, direction: 'UD', sortMethod: 'directed' } },
+        nodes: { shape: 'box', font: { multi: true, size: 16 } },
+        edges: { smooth: true, arrows: { to: { enabled: true } }, font: { size: 14, align: 'middle' } },
+        physics: false,
+        interaction: { dragNodes: true, zoomView: true }
+      };
+      new vis.Network(container, dataSet, options);
+    }
+    function getNodeColor(type) {
+      switch(type) {
+        case 'SYSTEM_MESSAGE': return '#e3f2fd';
+        case 'HOST_DIALOGUE': return '#fff3e0';
+        case 'PLAYER_CHOICE': return '#ffe0e0';
+        case 'SYSTEM_PLAYER_DIALOGUE': return '#e0f7fa';
+        case 'SYSTEM_ACTION': return '#ede7f6';
+        case 'STORY_END_FLAG': return '#c8e6c9';
+        default: return '#f5f5f5';
+      }
+    }
+  </script>
+</body>
+</html>

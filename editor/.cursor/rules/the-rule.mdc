@@ -1,0 +1,6 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+如果写完代码后，不需要调用运行命令，只需要只出可以运行了，并展示相关的命令即可。
