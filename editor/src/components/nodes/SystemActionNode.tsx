@@ -2,7 +2,7 @@ import React from 'react'
 import { Handle, Position } from '@xyflow/react'
 import { Card, Tag } from 'antd'
 
-interface HostDialogueNodeProps {
+interface SystemMessageNodeProps {
   data: {
     label: string
     nodeType: string
@@ -18,10 +18,10 @@ const nodeTypeColors: Record<string, string> = {
   HOST_DIALOGUE: 'green',
   PLAYER_CHOICE: 'orange',
   SYSTEM_PLAYER_DIALOGUE: 'purple',
-  STORY_END_FLAG: 'red'
+  STORY_END_FLAG: 'red',
 }
 
-const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
+const SystemMessageNode: React.FC<SystemMessageNodeProps> = ({ data }) => {
   const { label, nodeType, content, emotion, characterId } = data
 
   return (
@@ -64,4 +64,4 @@ const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
   )
 }
 
-export default HostDialogueNode 
+export default SystemMessageNode 

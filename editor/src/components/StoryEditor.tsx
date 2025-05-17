@@ -1,17 +1,18 @@
 import React, { useState, useCallback, useRef } from 'react'
-import ReactFlow, {
+import {
   Node,
   Edge,
   Controls,
+  ReactFlow,
   Background,
   useNodesState,
   useEdgesState,
   addEdge,
   Connection,
   Panel,
-  NodeTypes
-} from 'reactflow'
-import 'reactflow/dist/style.css'
+  NodeTypes,
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
 import { Card, Button, Space, Drawer, Typography, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 // import { calculateNodePositions } from '../utils/layout'
@@ -21,14 +22,18 @@ import SystemMessageNode from './nodes/SystemMessageNode'
 import SystemPlayerDialogueNode from './nodes/SystemPlayerDialogueNode'
 import StoryEndFlagNode from './nodes/StoryEndFlagNode'
 import HostDialogueNode from './nodes/HostDialogueNode'
+import ChoiceNode from './nodes/ChoiceNode'
+import SystemActionNode from './nodes/SystemActionNode'
 const { Text } = Typography
 
 const nodeTypes: NodeTypes = {
   playerChoiceNode: PlayerChoiceNode,
+  systemActionNode: SystemActionNode,
   systemMessageNode: SystemMessageNode,
   systemPlayerDialogueNode: SystemPlayerDialogueNode,
   storyEndFlagNode: StoryEndFlagNode,
-  hostDialogueNode: HostDialogueNode
+  hostDialogueNode: HostDialogueNode,
+  choiceNode: ChoiceNode
 }
 
 const nodeNameToType: Record<string, string> = {
@@ -36,13 +41,28 @@ const nodeNameToType: Record<string, string> = {
   HOST_DIALOGUE: 'hostDialogueNode',
   PLAYER_CHOICE: 'playerChoiceNode',
   SYSTEM_PLAYER_DIALOGUE: 'systemPlayerDialogueNode',
-  STORY_END_FLAG: 'storyEndFlagNode'
+  STORY_END_FLAG: 'storyEndFlagNode',
+  CHOICE: 'choiceNode',
+  SYSTEM_ACTION: 'systemActionNode'
 }
 
+interface MyNodeData {
+  [key: string]: string|string[]|null;
+  label: string;
+  nodeType: string;
+  content: string[];
+  emotion: string;
+  characterId: string;
+  choices: string[];
+}
+
+type MyNode = Node<MyNodeData, 'data'>;
+
+
 const StoryEditor: React.FC = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
-  const [selectedNode, setSelectedNode] = useState<Node | null>(null)
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
+  const [selectedNode, setSelectedNode] = useState<MyNode | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const onConnect = useCallback(
@@ -50,10 +70,11 @@ const StoryEditor: React.FC = () => {
     [setEdges]
   )
 
+
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    setSelectedNode(node)
+    setSelectedNode(node as MyNode)
   }, [])
-  
+
 
   // 文件选择并解析
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,9 +133,51 @@ const StoryEditor: React.FC = () => {
                 label: 'PLAYER_CHOICE',
                 nodeType: 'PLAYER_CHOICE',
                 content: node.content,
-                choices: node.choices,
               },
             })
+
+            // 为每个choice创建一个独立的节点
+            const choices = node.choices
+            choices.forEach((choice, idx) => {
+              const choiceNodeId = `${node.node_id}-choice-${idx}`
+              initialNodes.push({
+                id: choiceNodeId,
+                type: 'choiceNode',
+                parentId: node.node_id,
+                extent: 'parent',
+                position: {
+                  x: (idx - (choices.length - 1) / 2) * 150,
+                  y: 0
+                },
+                data: {
+                  label: 'CHOICE',
+                  nodeType: 'CHOICE',
+                  text: choice.text,
+                  choice_id: choice.choice_id
+                },
+              })
+
+              // 添加从PLAYER_CHOICE到CHOICE的连接
+              initialEdges.push({
+                id: `${node.node_id}-${choiceNodeId}`,
+                source: node.node_id,
+                target: choiceNodeId,
+                animated: true,
+                style: { stroke: '#faad14' }
+              })
+
+              // 如果choice有next_node_id，添加从CHOICE到next_node的连接
+              if (choice.next_node_id) {
+                initialEdges.push({
+                  id: `${choiceNodeId}-${choice.next_node_id}`,
+                  source: choiceNodeId,
+                  target: choice.next_node_id,
+                  animated: true,
+                  style: { stroke: '#faad14' }
+                })
+              }
+            })
+
             // 找到所有指向当前PLAYER_CHOICE的前驱节点
             const prevs = prevMap.get(node.node_id) || []
             prevs.forEach(prevId => {
@@ -125,19 +188,6 @@ const StoryEditor: React.FC = () => {
                 animated: true,
                 style: { stroke: '#faad14' }
               })
-            })
-            // 每个choice指向对应的next_node_id
-            node.choices.forEach((choice, idx) => {
-              if (choice.next_node_id) {
-                initialEdges.push({
-                  id: `${node.node_id}-choice-${idx}-${choice.next_node_id}`,
-                  source: node.node_id,
-                  sourceHandle: `choice-${idx}`,
-                  target: choice.next_node_id,
-                  animated: true,
-                  style: { stroke: '#faad14' }
-                })
-              }
             })
           } else {
             initialNodes.push({
@@ -186,7 +236,7 @@ const StoryEditor: React.FC = () => {
         accept=".json,application/json"
         ref={fileInputRef}
         style={{ display: 'none' }}
-        onChange={handleFileChange}
+      onChange={handleFileChange}
       />
       <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
         <Space>
