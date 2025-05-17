@@ -14,14 +14,29 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import { Card, Button, Space, Drawer, Typography, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import StoryNode from './nodes/StoryNode'
 // import { calculateNodePositions } from '../utils/layout'
 import { Story, StoryNode as StoryNodeType } from '../types/story'
-
+import PlayerChoiceNode from './nodes/PlayerChoiceNode'
+import SystemMessageNode from './nodes/SystemMessageNode'
+import SystemPlayerDialogueNode from './nodes/SystemPlayerDialogueNode'
+import StoryEndFlagNode from './nodes/StoryEndFlagNode'
+import HostDialogueNode from './nodes/HostDialogueNode'
 const { Text } = Typography
 
 const nodeTypes: NodeTypes = {
-  storyNode: StoryNode
+  playerChoiceNode: PlayerChoiceNode,
+  systemMessageNode: SystemMessageNode,
+  systemPlayerDialogueNode: SystemPlayerDialogueNode,
+  storyEndFlagNode: StoryEndFlagNode,
+  hostDialogueNode: HostDialogueNode
+}
+
+const nodeNameToType: Record<string, string> = {
+  SYSTEM_MESSAGE: 'systemMessageNode',
+  HOST_DIALOGUE: 'hostDialogueNode',
+  PLAYER_CHOICE: 'playerChoiceNode',
+  SYSTEM_PLAYER_DIALOGUE: 'systemPlayerDialogueNode',
+  STORY_END_FLAG: 'storyEndFlagNode'
 }
 
 const StoryEditor: React.FC = () => {
@@ -38,6 +53,7 @@ const StoryEditor: React.FC = () => {
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     setSelectedNode(node)
   }, [])
+  
 
   // 文件选择并解析
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,50 +120,46 @@ const StoryEditor: React.FC = () => {
 
         json.scenes[0].nodes.forEach((node: StoryNodeType) => {
           if (node.node_type === 'PLAYER_CHOICE' && node.choices && node.choices.length > 0) {
-            // 拆分为多个choice节点
+            // 创建一个PLAYER_CHOICE节点
+            initialNodes.push({
+              id: node.node_id,
+              type: nodeNameToType[node.node_type],
+              position: nodePos[node.node_id],
+              data: {
+                label: 'PLAYER_CHOICE',
+                nodeType: 'PLAYER_CHOICE',
+                content: node.content,
+                choices: node.choices,
+              },
+            })
+            // 找到所有指向当前PLAYER_CHOICE的前驱节点
+            const prevs = prevMap.get(node.node_id) || []
+            prevs.forEach(prevId => {
+              initialEdges.push({
+                id: `${prevId}-${node.node_id}`,
+                source: prevId,
+                target: node.node_id,
+                animated: true,
+                style: { stroke: '#faad14' }
+              })
+            })
+            // 每个choice指向对应的next_node_id
             node.choices.forEach((choice, idx) => {
-              const choiceNodeId = `${node.node_id}_CHOICE_${idx}`
-              initialNodes.push({
-                id: choiceNodeId,
-                type: 'storyNode',
-                position: choiceNodePos[choiceNodeId],
-                data: {
-                  label: 'PLAYER_CHOICE',
-                  nodeType: 'PLAYER_CHOICE',
-                  content: [choice.text],
-                  emotion: undefined,
-                  characterId: undefined,
-                  choices: undefined,
-                },
-              })
-              // 上一个节点指向每个choice节点
-              // 找到所有指向当前PLAYER_CHOICE的前驱节点
-              const prevs = prevMap.get(node.node_id) || []
-              prevs.forEach(prevId => {
-                initialEdges.push({
-                  id: `${prevId}-${choiceNodeId}`,
-                  source: prevId,
-                  target: choiceNodeId,
-                  animated: true,
-                  style: { stroke: '#faad14' }
-                })
-              })
-              // choice节点指向对应的next_node_id
               if (choice.next_node_id) {
                 initialEdges.push({
-                  id: `${choiceNodeId}-${choice.next_node_id}`,
-                  source: choiceNodeId,
+                  id: `${node.node_id}-choice-${idx}-${choice.next_node_id}`,
+                  source: node.node_id,
+                  sourceHandle: `choice-${idx}`,
                   target: choice.next_node_id,
                   animated: true,
                   style: { stroke: '#faad14' }
                 })
               }
             })
-            // PLAYER_CHOICE节点本身不渲染
           } else {
             initialNodes.push({
               id: node.node_id,
-              type: 'storyNode',
+              type: nodeNameToType[node.node_type],
               position: nodePos[node.node_id],
               data: {
                 label: node.node_type,

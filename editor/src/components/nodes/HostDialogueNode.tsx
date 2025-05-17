@@ -2,7 +2,7 @@ import React from 'react'
 import { Handle, Position } from 'reactflow'
 import { Card, Tag } from 'antd'
 
-interface StoryNodeProps {
+interface HostDialogueNodeProps {
   data: {
     label: string
     nodeType: string
@@ -21,8 +21,8 @@ const nodeTypeColors: Record<string, string> = {
   STORY_END_FLAG: 'red'
 }
 
-const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
-  const { label, nodeType, content, emotion, characterId, choices } = data
+const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
+  const { label, nodeType, content, emotion, characterId } = data
 
   return (
     <div style={{ position: 'relative', minWidth: 220, maxWidth: 320, width: 'fit-content', border: `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, borderRadius: 8, background: '#fff', boxShadow: '0 2px 8px #0001', margin: '0 auto', boxSizing: 'border-box' }}>
@@ -41,15 +41,7 @@ const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
         }
       >
         <div style={{ maxHeight: 200, overflow: 'auto', padding: 0 }}>
-          {nodeType === 'PLAYER_CHOICE' && choices && choices.length > 0 ? (
-            <div>
-              {choices.map((choice, idx) => (
-                <p key={choice.choice_id} style={{ margin: '4px 0', fontSize: '12px', color: '#faad14' }}>
-                  {choice.text}
-                </p>
-              ))}
-            </div>
-          ) : content && content.length > 0 ? (
+          {content && content.length > 0 ? (
             <div>
               {content.map((text, index) => (
                 <p key={index} style={{ margin: '4px 0', fontSize: '12px', wordBreak: 'break-all' }}>
@@ -72,4 +64,4 @@ const StoryNode: React.FC<StoryNodeProps> = ({ data }) => {
   )
 }
 
-export default StoryNode 
+export default HostDialogueNode 
