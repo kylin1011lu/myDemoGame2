@@ -29,6 +29,8 @@ export const nodeNameToType: Record<string, string> = {
 
 export interface MyNodeData {
     [key: string]: string | string[] | null;
+    preIds: string[];
+    level: string;
     label: string;
     nodeType: string;
     content: string[];

@@ -10,6 +10,22 @@ export function parseScene(scene: Scene) {
     const nodeIdMap = new Map<string, StoryNodeType>()
     scene.nodes.forEach((n) => nodeIdMap.set(n.node_id, n))
 
+    // 记录每个节点的前驱节点id（用于连线）
+    const prevMap = new Map<string, string[]>();
+    scene.nodes.forEach((n) => {
+        if (n.next_node_id) {
+            if (!prevMap.has(n.next_node_id)) prevMap.set(n.next_node_id, [])
+            prevMap.get(n.next_node_id)!.push(n.node_id)
+        }
+        if (n.node_type === 'PLAYER_CHOICE' && n.choices) {
+            n.choices.forEach((choice,idx) => {
+                if (choice.next_node_id) {
+                    if (!prevMap.has(choice.next_node_id)) prevMap.set(choice.next_node_id, [])
+                    prevMap.get(choice.next_node_id)!.push(`${n.node_id}-choice-${idx}`)
+                }
+            })
+        }
+    })
 
     scene.nodes.forEach((node: StoryNodeType) => {
         if (node.node_type === 'PLAYER_CHOICE' && node.choices && node.choices.length > 0) {
@@ -22,6 +38,8 @@ export function parseScene(scene: Scene) {
                     y: 0
                 },
                 data: {
+                    preIds: prevMap.get(node.node_id) || [],
+                    level: 0,
                     label: 'PLAYER_CHOICE',
                     nodeType: 'PLAYER_CHOICE',
                     content: node.content,
@@ -43,6 +61,7 @@ export function parseScene(scene: Scene) {
                         y: 0
                     },
                     data: {
+                        level: 0,
                         label: 'CHOICE',
                         nodeType: 'CHOICE',
                         text: choice.text,
@@ -70,6 +89,8 @@ export function parseScene(scene: Scene) {
                     y: 0
                 },
                 data: {
+                    preIds: prevMap.get(node.node_id) || [],
+                    level: 0,
                     label: node.node_type,
                     nodeType: node.node_type,
                     content: node.content,
@@ -90,8 +111,29 @@ export function parseScene(scene: Scene) {
         }
     })
 
+    // first node level is 0
+    initialNodes[0].data.level = "0";
+
+    // 根据Edges计算每个节点的level
+    initialEdges.forEach((edge) => {
+        const sourceNode = initialNodes.find((node) => node.id === edge.source)
+        const targetNode = initialNodes.find((node) => node.id === edge.target)
+
+        if (sourceNode?.type === 'choiceNode') {
+            const parentNode = initialNodes.find((node) => node.id === sourceNode.parentId)
+            if (parentNode) {
+                sourceNode.data.level = parentNode.data.level;
+            }
+        }
+
+        if (sourceNode && targetNode) {
+            targetNode.data.level = (Math.max(Number(targetNode.data.level || 0), Number(sourceNode.data.level || 0) + 1)) + "";
+        }
+    })
+
     // console.log(initialNodes)
     // console.log(initialEdges)
+
     return {
         initialNodes,
         initialEdges

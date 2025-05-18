@@ -25,35 +25,99 @@ const SystemPlayerDialogueNode: React.FC<SystemPlayerDialogueNodeProps> = ({ dat
   const { label, nodeType, content, emotion, characterId } = data
 
   return (
-    <div style={{ position: 'relative', minWidth: 220, maxWidth: 320, width: 'fit-content', border: `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, borderRadius: 8, background: '#fff', boxShadow: '0 2px 8px #0001', margin: '0 auto', boxSizing: 'border-box' }}>
+    <div style={{ 
+      position: 'relative', 
+      width: 240,
+      border: `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, 
+      borderRadius: 8, 
+      background: '#fff', 
+      boxShadow: '0 2px 8px #0001',
+      boxSizing: 'border-box'
+    }}>
       <Handle type="target" position={Position.Top} />
       <Card
         size="small"
         variant="borderless"
-        style={{ boxShadow: 'none', background: 'transparent', minWidth: 200, maxWidth: 300, width: '100%', border: 'none', padding: 0 }}
+        style={{ 
+          boxShadow: 'none', 
+          background: 'transparent', 
+          width: '100%', 
+          border: 'none', 
+          padding: '2px'
+        }}
         title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 8, 
+            flexWrap: 'wrap',
+            marginBottom: 8
+          }}>
             <Tag color={nodeTypeColors[nodeType] || 'default'}>
               {nodeType}
             </Tag>
-            {characterId && <Tag color="cyan" style={{ maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={characterId}>{characterId}</Tag>}
+            {characterId && (
+              <Tag 
+                color="cyan" 
+                style={{ 
+                  maxWidth: 120, 
+                  overflow: 'hidden', 
+                  textOverflow: 'ellipsis', 
+                  whiteSpace: 'nowrap' 
+                }} 
+                title={characterId}
+              >
+                {characterId}
+              </Tag>
+            )}
           </div>
         }
       >
-        <div style={{ maxHeight: 200, overflow: 'auto', padding: 0 }}>
+        <div style={{ 
+          maxHeight: 200, 
+          overflow: 'auto',
+          padding: '0 0px'
+        }}>
           {content && content.length > 0 ? (
-            <div>
+            <div style={{ 
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4
+            }}>
               {content.map((text, index) => (
-                <p key={index} style={{ margin: '4px 0', fontSize: '12px', wordBreak: 'break-all' }}>
+                <p 
+                  key={index} 
+                  style={{ 
+                    margin: 0,
+                    fontSize: '12px',
+                    lineHeight: '1.5',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'pre-wrap'
+                  }}
+                >
                   {text}
                 </p>
               ))}
             </div>
           ) : (
-            <p style={{ margin: 0, fontSize: '12px' }}>{label}</p>
+            <p style={{ 
+              margin: 0, 
+              fontSize: '12px',
+              lineHeight: '1.5',
+              wordBreak: 'break-word',
+              whiteSpace: 'pre-wrap'
+            }}>
+              {label}
+            </p>
           )}
           {emotion && (
-            <Tag color="magenta" style={{ marginTop: 8 }}>
+            <Tag 
+              color="magenta" 
+              style={{ 
+                marginTop: 8,
+                display: 'block'
+              }}
+            >
               {emotion}
             </Tag>
           )}
