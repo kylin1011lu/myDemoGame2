@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import {
   Node,
   Edge,
@@ -10,6 +10,10 @@ import {
   addEdge,
   Connection,
   Panel,
+  useNodesInitialized,
+  ReactFlowProvider,
+  useReactFlow,
+  useUpdateNodeInternals,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { Card, Button, Space, Drawer, Typography, message } from 'antd'
@@ -19,12 +23,135 @@ import { MyNode, nodeTypes } from '../types/define'
 import { parseScene } from '../types/parser'
 const { Text } = Typography
 
+const StoryEditorInner: React.FC = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [selectedNode, setSelectedNode] = useState<MyNode | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const nodesInitialized = useNodesInitialized();
+  const calculateLayoutRef = useRef<() => void>();
+  const { updateNode } = useReactFlow();
+  const updateNodeInternals = useUpdateNodeInternals();
 
-const StoryEditor: React.FC = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
-  const [selectedNode, setSelectedNode] = useState<MyNode | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // 默认展示
+  useEffect(() => {
+    setIsVisible(true)
+  }, [])
+
+  // 计算节点布局
+  calculateLayoutRef.current = () => {
+    if (!nodesInitialized || nodes.length === 0) return
+
+    const VERTICAL_SPACING = 100 // 恢复垂直间距
+    const HORIZONTAL_CENTER = 0
+    let currentY = 0
+
+    // 获取ReactFlow容器的尺寸
+    const flowContainer = document.querySelector('.react-flow')
+    if (!flowContainer) return
+    const containerRect = flowContainer.getBoundingClientRect()
+    const containerCenterX = containerRect.width / 2
+
+    // 通过计算choiceNode所有子节点的宽度，来计算父节点的宽度
+    let nodesHasChild: { [key: string]: Node[] } = {};
+    nodes.map((node) => {
+      if (node.type === 'choiceNode') {
+        if (!node.parentId) {
+          return node;
+        }
+
+        if (!nodesHasChild[node.parentId]) {
+          nodesHasChild[node.parentId] = [];
+        }
+        nodesHasChild[node.parentId].push(node);
+      }
+    })
+
+    // 计算有子节点的父节点的宽度和子节点的位置
+    Object.keys(nodesHasChild).forEach((parentId) => {
+      const parentNode = nodes.find((node) => node.id === parentId)
+      if (!parentNode) {
+        return
+      }
+
+      let totoalWidth = 0;
+      let padding = 5;
+      let margin = 10;
+
+      let childNodes = nodesHasChild[parentId];
+
+      let childX = 0;
+      childX += padding;
+
+      childNodes.forEach((childNode) => {
+        const childNodeElement = document.querySelector(`[data-id="${childNode.id}"]`)
+        if (!childNodeElement) {
+          return
+        }
+        const childNodeWidth = childNodeElement.getBoundingClientRect().width
+        totoalWidth += childNodeWidth;
+
+        childNode.position.x = childX;
+        childX += childNodeWidth + margin;
+        childNode.position.y = 60;
+      })
+
+      totoalWidth += padding * 2;
+      totoalWidth += margin * (childNodes.length - 1);
+
+      console.log("======", parentNode.id, 'totoalWidth', totoalWidth)
+
+      const nodeElement = document.querySelector(`[data-id="${parentNode.id}"]`) as HTMLElement;
+      if (nodeElement) {
+        nodeElement.style.width = totoalWidth + 'px';
+      }
+    })
+
+    requestAnimationFrame(() => {
+      const updatedNodes = nodes.map((node) => {
+        const nodeElement = document.querySelector(`[data-id="${node.id}"]`)
+        if (!nodeElement) {
+          console.warn('nodeElement is null', node.id)
+          return node
+        }
+
+        if (node.type === 'choiceNode') {
+          return node;
+        } else {
+          const nodeHeight = nodeElement.getBoundingClientRect().height
+          const nodeWidth = nodeElement.getBoundingClientRect().width
+
+          // 计算节点位置，使其中心点与容器中心对齐
+          const newPosition = {
+            x: containerCenterX - nodeWidth / 2,
+            y: currentY
+          }
+
+          console.log(node.id, 'containerCenterX', containerCenterX, 'nodeWidth', nodeWidth, 'x', newPosition.x)
+
+          currentY += nodeHeight + VERTICAL_SPACING
+
+          return {
+            ...node,
+            position: newPosition
+          }
+        }
+      })
+
+      setNodes(updatedNodes)
+    })
+  }
+
+  useEffect(() => {
+    if (nodesInitialized && calculateLayoutRef.current) {
+      calculateLayoutRef.current()
+      setTimeout(() => {
+        setIsVisible(true)
+      }, 200)
+    }
+  }, [nodesInitialized])
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -49,7 +176,7 @@ const StoryEditor: React.FC = () => {
           message.error('文件格式不正确')
           return
         }
-
+        setIsVisible(false)
         const { initialNodes, initialEdges } = parseScene(json.scenes[0]);
         setNodes(initialNodes)
         setEdges(initialEdges)
@@ -73,14 +200,14 @@ const StoryEditor: React.FC = () => {
         accept=".json,application/json"
         ref={fileInputRef}
         style={{ display: 'none' }}
-      onChange={handleFileChange}
+        onChange={handleFileChange}
       />
       <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
         <Space>
           <Button type="primary" onClick={handleLoadClick} icon={<PlusOutlined />}>加载故事数据</Button>
         </Space>
       </Card>
-      <div style={{ width: '100vw', height: '100vh', overflow: 'auto' }}>
+      <div style={{ opacity: isVisible ? 1 : 0, width: '100vw', height: '100vh', overflow: 'auto' }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -89,8 +216,8 @@ const StoryEditor: React.FC = () => {
           onConnect={onConnect}
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
-          fitView
           style={{ width: '100vw', height: '100vh' }}
+          defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         >
           <Background />
           <Controls />
@@ -146,6 +273,14 @@ const StoryEditor: React.FC = () => {
         )}
       </Drawer>
     </div>
+  )
+}
+
+const StoryEditor: React.FC = () => {
+  return (
+    <ReactFlowProvider>
+      <StoryEditorInner />
+    </ReactFlowProvider>
   )
 }
 

@@ -17,9 +17,9 @@ const PlayerChoiceNode: React.FC<PlayerChoiceNodeProps> = ({ data }) => {
   return (
     <div style={{ 
       position: 'relative', 
-      minWidth: 280, 
+      minWidth: 200, 
       maxWidth: 800, 
-      width: 'fit-content', 
+      height: 100,
       border: '2px solid #faad14', 
       borderRadius: 8, 
       background: '#fff', 
