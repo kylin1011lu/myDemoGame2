@@ -12,13 +12,14 @@ interface PlayerChoiceNodeProps {
 }
 
 const PlayerChoiceNode: React.FC<PlayerChoiceNodeProps> = ({ data }) => {
-  const { label, nodeType, content } = data
+  // const { label, nodeType, content } = data
 
   return (
     <div style={{ 
       position: 'relative', 
       minWidth: 280, 
       maxWidth: 800, 
+      height:300,
       width: 'fit-content', 
       border: '2px solid #faad14', 
       borderRadius: 8, 
@@ -40,17 +41,6 @@ const PlayerChoiceNode: React.FC<PlayerChoiceNodeProps> = ({ data }) => {
           </div>
         }
       >
-        <div style={{ maxHeight: 200, overflow: 'auto', padding: 0 }}>
-          {content && content.length > 0 && (
-            <div style={{ marginBottom: 12 }}>
-              {content.map((text, index) => (
-                <p key={index} style={{ margin: '4px 0', fontSize: '12px', wordBreak: 'break-all' }}>
-                  {text}
-                </p>
-              ))}
-            </div>
-          )}
-        </div>
       </Card>
     </div>
   )

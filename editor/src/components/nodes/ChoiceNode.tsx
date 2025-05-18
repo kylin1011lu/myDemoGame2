@@ -30,16 +30,6 @@ const ChoiceNode: React.FC<ChoiceNodeProps> = ({ data }) => {
       transition: 'all 0.3s'
     }}>
       <Handle
-        type="target"
-        position={Position.Top}
-        style={{ 
-          background: '#faad14',
-          width: 8,
-          height: 8,
-          top: -4
-        }}
-      />
-      <Handle
         type="source"
         position={Position.Bottom}
         style={{ 
