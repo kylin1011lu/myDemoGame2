@@ -73,13 +73,17 @@
         {
           "node_id": "NODE_ACT1_006_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["你是谁？"],
+          "content": [
+            "你是谁？"
+          ],
           "next_node_id": "NODE_ACT1_007"
         },
         {
           "node_id": "NODE_ACT1_006_B",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["你怎么了，兕子？"],
+          "content": [
+            "你怎么了，兕子？"
+          ],
           "next_node_id": "NODE_ACT1_007"
         },
         {
@@ -98,7 +102,9 @@
         {
           "node_id": "NODE_ACT1_008",
           "node_type": "SYSTEM_MESSAGE",
-          "content": ["系统提示：宿主生命体征持续下降，疼痛阈值已达临界点。"],
+          "content": [
+            "系统提示：宿主生命体征持续下降，疼痛阈值已达临界点。"
+          ],
           "next_node_id": "NODE_ACT1_009"
         },
         {
@@ -111,21 +117,29 @@
               "text": "[立即治疗] 帮助她。",
               "next_node_id": "NODE_ACT1_010",
               "effects": [
-                {"type": "SET_VARIABLE", "variable_name": "player_action", "value": "chose_treat"}
+                {
+                  "type": "SET_VARIABLE",
+                  "variable_name": "player_action",
+                  "value": "chose_treat"
+                }
               ]
             },
             {
               "choice_id": "CHOICE_ACT1_009_B",
               "text": "[暂不治疗] 再观察一下。",
-              "next_node_id": "NODE_ACT1_010_OBSERVE", // 观察分支
+              "next_node_id": "NODE_ACT1_010_OBSERVE",
               "effects": [
-                {"type": "SET_VARIABLE", "variable_name": "player_action", "value": "chose_observe"}
+                {
+                  "type": "SET_VARIABLE",
+                  "variable_name": "player_action",
+                  "value": "chose_observe"
+                }
               ]
             }
           ]
         },
         {
-          "node_id": "NODE_ACT1_010_OBSERVE", // 观察后的节点
+          "node_id": "NODE_ACT1_010_OBSERVE",
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "MORE_PAINED",
@@ -146,10 +160,14 @@
             },
             {
               "choice_id": "CHOICE_ACT1_010_OBSERVE_B",
-              "text": "[言语安抚] “别怕，有我在。”", // 若持续不治疗，可能会有负面结局或剧情调整
+              "text": "[言语安抚] “别怕，有我在。”",
               "next_node_id": "NODE_ACT1_010_COMFORT",
               "effects": [
-                {"type": "CHANGE_TRUST", "value": -5, "target": "HOST_JINYANG"} // 示例：只安抚不治疗可能降低信任
+                {
+                  "type": "CHANGE_TRUST",
+                  "value": -5,
+                  "target": "HOST_JINYANG"
+                }
               ]
             }
           ]
@@ -157,13 +175,17 @@
         {
           "node_id": "NODE_ACT1_010_COMFORT",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["别怕，有我在。"],
-          "next_node_id": "NODE_ACT1_010_OBSERVE" // 循环回观察，或设计新的后续
+          "content": [
+            "别怕，有我在。"
+          ],
+          "next_node_id": "NODE_ACT1_010"
         },
         {
           "node_id": "NODE_ACT1_010",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["兕子，闭上眼睛，放轻松，疼痛马上就会减轻了。"],
+          "content": [
+            "兕子，闭上眼睛，放轻松，疼痛马上就会减轻了。"
+          ],
           "next_node_id": "NODE_ACT1_011"
         },
         {
@@ -187,8 +209,16 @@
           ],
           "next_node_id": "NODE_ACT1_013",
           "effects": [
-            {"type": "CHANGE_HOST_STATUS", "status_variable": "health", "value": "stable"},
-            {"type": "CHANGE_TRUST", "value": 20, "target": "HOST_JINYANG"}
+            {
+              "type": "CHANGE_HOST_STATUS",
+              "status_variable": "health",
+              "value": "stable"
+            },
+            {
+              "type": "CHANGE_TRUST",
+              "value": 20,
+              "target": "HOST_JINYANG"
+            }
           ]
         },
         {
@@ -239,22 +269,46 @@
         {
           "node_id": "NODE_ACT1_016_BRO",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["不用谢，兕子。你可以叫我大哥哥。先好好休息吧。等你醒来，我们再慢慢认识。"],
-          "effects": [{"type": "SET_VARIABLE", "variable_name": "player_appellation", "value": "大哥哥"}],
+          "content": [
+            "不用谢，兕子。你可以叫我大哥哥。先好好休息吧。等你醒来，我们再慢慢认识。"
+          ],
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "player_appellation",
+              "value": "大哥哥"
+            }
+          ],
           "next_node_id": "NODE_ACT1_017"
         },
         {
           "node_id": "NODE_ACT1_016_SIS",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["不用谢，兕子。你可以叫我大姐姐。先好好休息吧。等你醒来，我们再慢慢认识。"],
-          "effects": [{"type": "SET_VARIABLE", "variable_name": "player_appellation", "value": "大姐姐"}],
+          "content": [
+            "不用谢，兕子。你可以叫我大姐姐。先好好休息吧。等你醒来，我们再慢慢认识。"
+          ],
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "player_appellation",
+              "value": "大姐姐"
+            }
+          ],
           "next_node_id": "NODE_ACT1_017"
         },
         {
           "node_id": "NODE_ACT1_016_FRIEND",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["不用谢，兕子。我没有名字，叫我‘朋友’吧。先好好休息吧。等你醒来，我们再慢慢认识。"],
-          "effects": [{"type": "SET_VARIABLE", "variable_name": "player_appellation", "value": "朋友"}],
+          "content": [
+            "不用谢，兕子。我没有名字，叫我‘朋友’吧。先好好休息吧。等你醒来，我们再慢慢认识。"
+          ],
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "player_appellation",
+              "value": "朋友"
+            }
+          ],
           "next_node_id": "NODE_ACT1_017"
         },
         {
@@ -262,15 +316,17 @@
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "PEACEFUL_CURIOUS",
-          "content_template": "{player_appellation}...好...谢谢你，{player_appellation}...晚安...", // 使用模板引用变量
+          "content_template": "{player_appellation}...好...谢谢你，{player_appellation}...晚安...",
           "next_node_id": "NODE_ACT1_END"
         },
         {
           "node_id": "NODE_ACT1_END",
           "node_type": "STORY_END_FLAG",
           "outcome": "HOST_STABILIZED_LINK_ESTABLISHED",
-          "unlocks": ["SCENE_ACT2_AWAKENING"], // 解锁第二幕场景
-          "next_node_id": "NODE_ACT2_001" // 指向第二幕的起始节点
+          "unlocks": [
+            "SCENE_ACT2_AWAKENING"
+          ],
+          "next_node_id": "NODE_ACT2_001"
         }
       ]
     },
@@ -325,7 +381,9 @@
         {
           "node_id": "NODE_ACT2_004_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["我还在，兕子。你感觉怎么样了？"],
+          "content": [
+            "我还在，兕子。你感觉怎么样了？"
+          ],
           "next_node_id": "NODE_ACT2_005"
         },
         {
@@ -339,8 +397,10 @@
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "SAD_LONELY",
-          "content": ["{player_appellation}真的走了...兕子一个人了..."],
-          "next_node_id": "NODE_ACT2_003" // 让她再呼唤一次，或者玩家主动回应
+          "content": [
+            "{player_appellation}真的走了...兕子一个人了..."
+          ],
+          "next_node_id": "NODE_ACT2_003"
         },
         {
           "node_id": "NODE_ACT2_005",
@@ -363,26 +423,46 @@
               "choice_id": "CHOICE_ACT2_006_A",
               "text": "[默认神仙说] “嗯，你可以这么认为，我会保护兕子的。”",
               "next_node_id": "NODE_ACT2_007_A",
-              "effects": [{"type": "SET_VARIABLE", "variable_name": "system_identity", "value": "神仙"}]
+              "effects": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variable_name": "system_identity",
+                  "value": "神仙"
+                }
+              ]
             },
             {
               "choice_id": "CHOICE_ACT2_006_B",
               "text": "[强调朋友关系] “我不是神仙，兕子。我是你的特殊朋友，{player_appellation}。”",
               "next_node_id": "NODE_ACT2_007_B",
-              "effects": [{"type": "SET_VARIABLE", "variable_name": "system_identity", "value": "特殊朋友"}]
+              "effects": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variable_name": "system_identity",
+                  "value": "特殊朋友"
+                }
+              ]
             },
             {
               "choice_id": "CHOICE_ACT2_006_C",
               "text": "[模糊处理] “我是来帮助你的人，兕子。你感觉好些了我就放心了。”",
               "next_node_id": "NODE_ACT2_007_C",
-              "effects": [{"type": "SET_VARIABLE", "variable_name": "system_identity", "value": "帮助者"}]
+              "effects": [
+                {
+                  "type": "SET_VARIABLE",
+                  "variable_name": "system_identity",
+                  "value": "帮助者"
+                }
+              ]
             }
           ]
         },
         {
           "node_id": "NODE_ACT2_007_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["嗯，你可以这么认为，我会保护兕子的。"],
+          "content": [
+            "嗯，你可以这么认为，我会保护兕子的。"
+          ],
           "next_node_id": "NODE_ACT2_008"
         },
         {
@@ -394,7 +474,9 @@
         {
           "node_id": "NODE_ACT2_007_C",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["我是来帮助你的人，兕子。你感觉好些了我就放心了。"],
+          "content": [
+            "我是来帮助你的人，兕子。你感觉好些了我就放心了。"
+          ],
           "next_node_id": "NODE_ACT2_008"
         },
         {
@@ -430,19 +512,25 @@
         {
           "node_id": "NODE_ACT2_010_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["我住在一个离这里很远很远的地方，兕子暂时还不能过来。"],
-          "next_node_id": "NODE_ACT2_011_ASK_FOOD" // 无论如何，小公主都会想到吃的
+          "content": [
+            "我住在一个离这里很远很远的地方，兕子暂时还不能过来。"
+          ],
+          "next_node_id": "NODE_ACT2_011_ASK_FOOD"
         },
         {
           "node_id": "NODE_ACT2_010_B",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["虽然你看不到我，但我可以一直像这样和你说话，陪着你。"],
+          "content": [
+            "虽然你看不到我，但我可以一直像这样和你说话，陪着你。"
+          ],
           "next_node_id": "NODE_ACT2_011_ASK_FOOD"
         },
         {
           "node_id": "NODE_ACT2_010_C",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["兕子现在肚子饿不饿呀？想不想吃点什么好吃的？"],
+          "content": [
+            "兕子现在肚子饿不饿呀？想不想吃点什么好吃的？"
+          ],
           "next_node_id": "NODE_ACT2_011_FOOD_RESPONSE"
         },
         {
@@ -454,7 +542,7 @@
             "哦...那好吧...",
             "那...{player_appellation}，你是不是又有像昨天晚上那样，能让兕子不难受，还会变出好吃的本事呀？",
             "我想吃...甜甜的...嗯...像上次阿娘给我吃过的那种，外面有层亮晶晶糖衣的果子，好好吃！"
-            ],
+          ],
           "next_node_id": "NODE_ACT2_012"
         },
         {
@@ -466,13 +554,15 @@
             "饿！兕子肚子咕咕叫了！",
             "{player_appellation}，你是不是又有像昨天晚上那样，能让兕子不难受，还会变出好吃的本事呀？",
             "我想吃...甜甜的...嗯...像上次阿娘给我吃过的那种，外面有层亮晶晶糖衣的果子，好好吃！"
-            ],
+          ],
           "next_node_id": "NODE_ACT2_012"
         },
         {
           "node_id": "NODE_ACT2_012",
           "node_type": "SYSTEM_MESSAGE",
-          "content": ["系统提示：宿主表达了对特定食物的渴望（甜点/糖果类）。"],
+          "content": [
+            "系统提示：宿主表达了对特定食物的渴望（甜点/糖果类）。"
+          ],
           "next_node_id": "NODE_ACT2_013"
         },
         {
@@ -485,7 +575,10 @@
               "text": "[虚拟投喂-糖果] “{player_appellation}这里正好有一种很特别的糖果，你想尝尝吗？”",
               "next_node_id": "NODE_ACT2_014_A",
               "effects": [
-                {"type": "CHANGE_ENERGY", "value": -10} // 示例能量消耗
+                {
+                  "type": "CHANGE_ENERGY",
+                  "value": -10
+                }
               ]
             },
             {
@@ -509,20 +602,25 @@
         {
           "node_id": "NODE_ACT2_014_B",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["兕子可以叫青岚姐姐，看看今天早上尚食局有没有准备你喜欢的糕点呀？"],
-          "next_node_id": "NODE_ACT2_017_CALL_QINGLAN" // 引导至呼叫青岚的剧情
+          "content": [
+            "兕子可以叫青岚姐姐，看看今天早上尚食局有没有准备你喜欢的糕点呀？"
+          ],
+          "next_node_id": "NODE_ACT2_017_CALL_QINGLAN"
         },
         {
           "node_id": "NODE_ACT2_014_C",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
           "content_template": "那种糖果{player_appellation}这次没有带哦，下次一定给你带来好不好？",
-          "next_node_id": "NODE_ACT2_017_PROMISE_NEXT_TIME" // 承诺后的反应
+          "next_node_id": "NODE_ACT2_017_PROMISE_NEXT_TIME"
         },
         {
           "node_id": "NODE_ACT2_015",
-          "node_type": "SYSTEM_ACTION", // 模拟物品出现
+          "node_type": "SYSTEM_ACTION",
           "action_type": "PLACE_VIRTUAL_ITEM",
-          "parameters": {"item_id": "CANDY_001", "location_hint": "枕头边"},
+          "parameters": {
+            "item_id": "CANDY_001",
+            "location_hint": "枕头边"
+          },
           "feedback_message_to_player": "系统具象化糖果概念...",
           "next_node_id": "NODE_ACT2_016"
         },
@@ -543,8 +641,10 @@
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "SLIGHTLY_DISAPPOINTED_BUT_UNDERSTANDING",
-          "content": ["哦...那好吧...那{player_appellation}下次一定要带给兕子哦！我们拉钩！"],
-          "next_node_id": "NODE_ACT2_020_CALL_QINGLAN" // 即使承诺下次，也可能饿了叫青岚
+          "content": [
+            "哦...那好吧...那{player_appellation}下次一定要带给兕子哦！我们拉钩！"
+          ],
+          "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
         },
         {
           "node_id": "NODE_ACT2_017",
@@ -571,19 +671,25 @@
         {
           "node_id": "NODE_ACT2_018_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["是呀，这是给乖兕子的小奖励，快尝尝看喜不喜欢。"],
+          "content": [
+            "是呀，这是给乖兕子的小奖励，快尝尝看喜不喜欢。"
+          ],
           "next_node_id": "NODE_ACT2_019"
         },
         {
           "node_id": "NODE_ACT2_018_B",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["可能是昨晚偷偷溜进来的小精灵送给你的哦。"],
+          "content": [
+            "可能是昨晚偷偷溜进来的小精灵送给你的哦。"
+          ],
           "next_node_id": "NODE_ACT2_019"
         },
         {
           "node_id": "NODE_ACT2_018_C",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["这是你心诚则灵，自己变出来的呢！"],
+          "content": [
+            "这是你心诚则灵，自己变出来的呢！"
+          ],
           "next_node_id": "NODE_ACT2_019"
         },
         {
@@ -624,7 +730,7 @@
           "node_id": "NODE_ACT2_021_A",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
           "content_template": "月亮太高太大了，{player_appellation}也摘不下来呢。不过，我可以给你讲月亮的故事。",
-          "next_node_id": "NODE_ACT2_022_STORY_MOON" // 讲故事分支
+          "next_node_id": "NODE_ACT2_022_STORY_MOON"
         },
         {
           "node_id": "NODE_ACT2_021_B",
@@ -635,8 +741,10 @@
         {
           "node_id": "NODE_ACT2_021_C",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["噓，月亮是大家的，摘下来别人就看不到了。我们换个别的，好不好？"],
-          "next_node_id": "NODE_ACT2_022_CHANGE_REQUEST" // 换个要求分支
+          "content": [
+            "噓，月亮是大家的，摘下来别人就看不到了。我们换个别的，好不好？"
+          ],
+          "next_node_id": "NODE_ACT2_022_CHANGE_REQUEST"
         },
         {
           "node_id": "NODE_ACT2_022_ASK_FOR_MOON_FOOD",
@@ -646,7 +754,7 @@
           "content": [
             "想想想！圆圆亮亮的好吃的！是不是像天上的星星糖一样？",
             "{player_appellation}快给我变！兕子现在就要！"
-            ],
+          ],
           "next_node_id": "NODE_ACT2_023"
         },
         {
@@ -658,11 +766,16 @@
               "choice_id": "CHOICE_ACT2_023_A",
               "text": "[满足她-虚拟饼干] “好，你看看窗台上，是不是有块圆圆的香香的小饼干？”",
               "next_node_id": "NODE_ACT2_024_A_COOKIE",
-              "effects": [{"type": "CHANGE_ENERGY", "value": -5}]
+              "effects": [
+                {
+                  "type": "CHANGE_ENERGY",
+                  "value": -5
+                }
+              ]
             },
             {
               "choice_id": "CHOICE_ACT2_023_B",
-              "text": "[设定条件] “这个好吃的呀，要等兕子乖乖起床，洗漱干净了才能变出来哦.”", // 之前已经用过，这里可以换个条件或直接给
+              "text": "[设定条件] “这个好吃的呀，要等兕子乖乖起床，洗漱干净了才能变出来哦.”",
               "next_node_id": "NODE_ACT2_024_B_CONDITION"
             },
             {
@@ -672,18 +785,22 @@
             }
           ]
         },
-        // ... (后续分支继续，例如 NODE_ACT2_024_A_COOKIE 之后是小公主找到饼干的对话)
         {
           "node_id": "NODE_ACT2_024_A_COOKIE",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["好，你看看窗台上，是不是有块圆圆的香香的小饼干？"],
+          "content": [
+            "好，你看看窗台上，是不是有块圆圆的香香的小饼干？"
+          ],
           "next_node_id": "NODE_ACT2_025_FIND_COOKIE"
         },
         {
           "node_id": "NODE_ACT2_025_FIND_COOKIE",
           "node_type": "SYSTEM_ACTION",
           "action_type": "PLACE_VIRTUAL_ITEM",
-          "parameters": {"item_id": "COOKIE_001", "location_hint": "窗台"},
+          "parameters": {
+            "item_id": "COOKIE_001",
+            "location_hint": "窗台"
+          },
           "feedback_message_to_player": "系统具象化饼干概念...",
           "next_node_id": "NODE_ACT2_026_HOST_FINDS_COOKIE"
         },
@@ -692,13 +809,17 @@
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "HAPPY",
-          "content": ["哇！真的有小饼干！谢谢{player_appellation}！"],
-          "next_node_id": "NODE_ACT2_020_CALL_QINGLAN" // 吃完零食，准备叫青岚
+          "content": [
+            "哇！真的有小饼干！谢谢{player_appellation}！"
+          ],
+          "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
         },
         {
           "node_id": "NODE_ACT2_024_B_CONDITION",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["这个好吃的呀，要等兕子乖乖叫青岚姐姐来，帮你穿好衣服梳好头头才能变出来哦。"],
+          "content": [
+            "这个好吃的呀，要等兕子乖乖叫青岚姐姐来，帮你穿好衣服梳好头头才能变出来哦。"
+          ],
           "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
         },
         {
@@ -708,7 +829,7 @@
           "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
         },
         {
-          "node_id": "NODE_ACT2_020_CALL_QINGLAN", // 无论是哪种引导，最终都会到叫青岚
+          "node_id": "NODE_ACT2_020_CALL_QINGLAN",
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "OBEDIENT_EXPECTANT",
@@ -721,7 +842,7 @@
         },
         {
           "node_id": "NODE_ACT2_021_QINGLAN_ENTERS",
-          "node_type": "SYSTEM_MESSAGE", // 这里用SYSTEM_MESSAGE表示NPC的行动和对话
+          "node_type": "SYSTEM_MESSAGE",
           "content": [
             "（青岚被惊醒，匆忙应声进来。）",
             "青岚：“哎哟，我的小殿下，您醒啦！感觉怎么样？还难受吗？”",
@@ -773,8 +894,10 @@
         },
         {
           "node_id": "NODE_ACT2_026_A_REMIND",
-          "node_type": "SYSTEM_PLAYER_DIALOGUE", // 对宿主说的，但目的是提醒
-          "content": ["兕子，我们是好朋友，我们的事情是小秘密哦，不能随便告诉别人的。"],
+          "node_type": "SYSTEM_PLAYER_DIALOGUE",
+          "content": [
+            "兕子，我们是好朋友，我们的事情是小秘密哦，不能随便告诉别人的。"
+          ],
           "next_node_id": "NODE_ACT2_027_HOST_UNDERSTANDS_SECRET"
         },
         {
@@ -782,13 +905,17 @@
           "node_type": "HOST_DIALOGUE",
           "character_id": "HOST_JINYANG",
           "emotion": "PLAYFUL_SECRETIVE",
-          "content": ["（小嘴立刻抿紧，然后对着青岚神秘一笑）嘻嘻，青岚姐姐，这是兕子的小秘密，不能告诉你！"],
+          "content": [
+            "（小嘴立刻抿紧，然后对着青岚神秘一笑）嘻嘻，青岚姐姐，这是兕子的小秘密，不能告诉你！"
+          ],
           "next_node_id": "NODE_ACT2_028_QINGLAN_FINAL_REACTION"
         },
         {
-          "node_id": "NODE_ACT2_026_B_OBSERVE", // 如果选择不提醒，直接到青岚的最终反应
+          "node_id": "NODE_ACT2_026_B_OBSERVE",
           "node_type": "SYSTEM_MESSAGE",
-          "content": ["（你决定暂时不干涉。）"],
+          "content": [
+            "（你决定暂时不干涉。）"
+          ],
           "next_node_id": "NODE_ACT2_028_QINGLAN_FINAL_REACTION"
         },
         {
@@ -799,15 +926,22 @@
           ],
           "next_node_id": "NODE_ACT2_END",
           "effects": [
-            {"type": "CHANGE_TRUST", "value": 10, "target": "HOST_JINYANG", "condition": "player_reminded_secret"} // 如果玩家提醒了保密，增加信任
+            {
+              "type": "CHANGE_TRUST",
+              "value": 10,
+              "target": "HOST_JINYANG",
+              "condition": "player_reminded_secret"
+            }
           ]
         },
         {
           "node_id": "NODE_ACT2_END",
           "node_type": "STORY_END_FLAG",
           "outcome": "HOST_AWAKENED_INTERACTED",
-          "unlocks": ["STORY_JINYANG_ACT3"],
-          "next_node_id": null // 暂时没有下一幕
+          "unlocks": [
+            "STORY_JINYANG_ACT3"
+          ],
+          "next_node_id": null
         }
       ]
     }
