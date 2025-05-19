@@ -37,6 +37,7 @@ export interface MyNodeData {
     emotion: string;
     characterId: string;
     choices: string[];
+    prompt: string
 }
 
 export type MyNode = Node<MyNodeData, 'data'>;

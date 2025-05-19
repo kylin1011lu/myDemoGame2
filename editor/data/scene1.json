@@ -65,7 +65,7 @@
             },
             {
               "choice_id": "CHOICE_ACT1_005_B",
-              "text": "“你怎么了，兕子？”",
+              "text": "“你怎么了”",
               "next_node_id": "NODE_ACT1_006_B"
             }
           ]
@@ -79,7 +79,7 @@
         {
           "node_id": "NODE_ACT1_006_B",
           "node_type": "SYSTEM_PLAYER_DIALOGUE",
-          "content": ["你怎么了，兕子？"],
+          "content": ["你怎么了"],
           "next_node_id": "NODE_ACT1_007"
         },
         {
@@ -210,7 +210,7 @@
           "content": [
             "你...你真的治好我了！",
             "你真的是神仙吗？只有神仙才有这样的本事！",
-            "谢谢你...神仙...嗯...你叫什么名字呀？"
+            "谢谢你...神仙。"
           ],
           "next_node_id": "NODE_ACT1_015"
         },
@@ -221,7 +221,7 @@
           "choices": [
             {
               "choice_id": "CHOICE_ACT1_015_A",
-              "text": "“你可以叫我，大哥哥。”",
+              "text": "“大哥哥。”",
               "next_node_id": "NODE_ACT1_016_BRO"
             },
             {

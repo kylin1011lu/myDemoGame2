@@ -14,13 +14,13 @@ import {
   ReactFlowProvider,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { Card, Button, Space, Drawer, Typography, message } from 'antd'
+import { Card, Button, Space, Drawer, Typography, message, List } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Story } from '../types/story'
 import { MyNode, nodeTypes } from '../types/define'
 import { parseScene } from '../types/parser'
 import { caculateNodePositions } from '../utils/layout'
-const { Text } = Typography
+const { Text, Title } = Typography
 
 const StoryEditorInner: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -30,7 +30,8 @@ const StoryEditorInner: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nodesInitialized = useNodesInitialized();
   const calculateLayoutRef = useRef<() => void>();
-
+  const [storyData, setStoryData] = useState<Story | null>(null);
+  const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
 
   // 默认展示
   useEffect(() => {
@@ -65,11 +66,22 @@ const StoryEditorInner: React.FC = () => {
     [setEdges]
   )
 
-
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     setSelectedNode(node as MyNode)
   }, [])
 
+  // 切换场景
+  const handleSceneChange = useCallback((index: number) => {
+    if (!storyData) return;
+    setCurrentSceneIndex(index);
+    setIsVisible(false);
+    const { initialNodes, initialEdges } = parseScene(storyData.scenes[index]);
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 200);
+  }, [storyData, setNodes, setEdges]);
 
   // 文件选择并解析
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +95,8 @@ const StoryEditorInner: React.FC = () => {
           message.error('文件格式不正确')
           return
         }
+        setStoryData(json);
+        setCurrentSceneIndex(0);
         setIsVisible(false)
         const { initialNodes, initialEdges } = parseScene(json.scenes[0]);
         setNodes(initialNodes)
@@ -109,9 +123,31 @@ const StoryEditorInner: React.FC = () => {
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
-      <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
-        <Space>
-          <Button type="primary" onClick={handleLoadClick} icon={<PlusOutlined />}>加载故事数据</Button>
+      <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, width: 300 }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Button type="primary" onClick={handleLoadClick} icon={<PlusOutlined />} block>加载故事数据</Button>
+          {storyData && (
+            <>
+              <Title level={4}>{storyData.story_title}</Title>
+              <Text type="secondary">{storyData.description}</Text>
+              <List
+                size="small"
+                bordered
+                dataSource={storyData.scenes}
+                renderItem={(scene, index) => (
+                  <List.Item
+                    style={{ 
+                      cursor: 'pointer',
+                      background: currentSceneIndex === index ? '#e6f7ff' : 'transparent'
+                    }}
+                    onClick={() => handleSceneChange(index)}
+                  >
+                    <Text>{scene.scene_title}</Text>
+                  </List.Item>
+                )}
+              />
+            </>
+          )}
         </Space>
       </Card>
       <div style={{ opacity: isVisible ? 1 : 0, width: '100vw', height: '100vh', overflow: 'auto' }}>

@@ -18,7 +18,7 @@ export function parseScene(scene: Scene) {
             prevMap.get(n.next_node_id)!.push(n.node_id)
         }
         if (n.node_type === 'PLAYER_CHOICE' && n.choices) {
-            n.choices.forEach((choice,idx) => {
+            n.choices.forEach((choice, idx) => {
                 if (choice.next_node_id) {
                     if (!prevMap.has(choice.next_node_id)) prevMap.set(choice.next_node_id, [])
                     prevMap.get(choice.next_node_id)!.push(`${n.node_id}-choice-${idx}`)
@@ -40,9 +40,10 @@ export function parseScene(scene: Scene) {
                 data: {
                     preIds: prevMap.get(node.node_id) || [],
                     level: 0,
-                    label: 'PLAYER_CHOICE',
+                    label: '请选择',
                     nodeType: 'PLAYER_CHOICE',
                     content: node.content,
+                    prompt: node.prompt
                 },
             })
 
@@ -127,7 +128,11 @@ export function parseScene(scene: Scene) {
         }
 
         if (sourceNode && targetNode) {
-            targetNode.data.level = (Math.max(Number(targetNode.data.level || 0), Number(sourceNode.data.level || 0) + 1)) + "";
+            if (targetNode.type == "playerChoiceNode" && targetNode.data.level != 0) {
+                // 不处理
+            } else {
+                targetNode.data.level = (Math.max(Number(targetNode.data.level || 0), Number(sourceNode.data.level || 0) + 1)) + "";
+            }
         }
     })
 

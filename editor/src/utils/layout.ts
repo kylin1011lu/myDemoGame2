@@ -52,6 +52,8 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
     let childX = 0;
     childX += padding;
 
+    let maxChildHeight = 0;
+
     childNodes.forEach((childNode) => {
       const childNodeElement = document.querySelector(`[data-id="${childNode.id}"]`)
       if (!childNodeElement) {
@@ -64,11 +66,13 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
 
       choicePostions[childNode.id] = {
         x: childX + childNodeWidth / 2,
-        y: 60
+        y: 50
       }
 
       childX += childNodeWidth + margin;
-      childNode.position.y = 60;
+      childNode.position.y = 50;
+
+      maxChildHeight = Math.max(maxChildHeight, childNodeElement.getBoundingClientRect().height);
     })
 
     totoalWidth += padding * 2;
@@ -79,6 +83,7 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
     const nodeElement = document.querySelector(`[data-id="${parentNode.id}"]`) as HTMLElement;
     if (nodeElement) {
       nodeElement.style.width = totoalWidth + 'px';
+      nodeElement.style.height = 50 + maxChildHeight + 10 + 'px';
       parentWidths[parentNode.id] = totoalWidth;
     }
   })
