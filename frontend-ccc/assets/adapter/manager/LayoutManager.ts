@@ -45,18 +45,20 @@ export class LayoutManager extends Manager {
     @property({
         tooltip: "延迟布局，开启后会统一在下一帧布局，建议开启"
     }) delayLayout: boolean = true
+
     @property private _forceExpandWidth: boolean = false
-    @(property as any)({
+    @property({
         group: { id: "0", name: "forceExpand" },
         tooltip: "是否强制布局元素宽度扩展以填充额外的可用空间"
-    }) get forceExpandWidth() { return this._forceExpandWidth }
+    }) 
+    get forceExpandWidth() { return this._forceExpandWidth }
     public set forceExpandWidth(value: boolean) {
         if (value == this._forceExpandWidth) return
         this._forceExpandWidth = value
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _forceExpandHeight: boolean = true
-    @(property as any)({
+    @property({
         group: { id: "0", name: "forceExpand" },
         tooltip: "是否强制布局元素高度扩展以填充额外的可用空间"
     }) get forceExpandHeight() { return this._forceExpandHeight }
@@ -66,7 +68,7 @@ export class LayoutManager extends Manager {
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlSizeWidth: boolean = false
-    @(property as any)({
+    @property({
         group: { id: "0", name: "controlSize" },
         tooltip: "如果设置为 false，布局只会影响元素的位置，而不会影响宽度，在这种情况下你可以设置元素的宽度\n如果设置为 true，元素的宽度将由布局根据它们各自的 IElement.minSize、IElement.preferredSize、IElement.flexibleSize自动设置。如果元素的宽度应根据可用空间的大小而变化，应开启此功能。在这种情况下不能直接设置每个元素的宽度，但可以通过控制每个元素的IElement.minSize、IElement.preferredSize、IElement.flexibleSize来进行控制"
     }) get controlSizeWidth() { return this._controlSizeWidth }
@@ -76,7 +78,7 @@ export class LayoutManager extends Manager {
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlSizeHeight: boolean = false
-    @(property as any)({
+    @property({
         group: { id: "0", name: "controlSize" },
         tooltip: "如果设置为 false，布局只会影响元素的位置，而不会影响高度，在这种情况下你可以设置元素的高度\n如果设置为 true，元素的高度将由布局根据它们各自的 IElement.minSize、IElement.preferredSize、IElement.flexibleSize自动设置。如果元素的高度应根据可用空间的大小而变化，应开启此功能。在这种情况下不能直接设置每个元素的高度，但可以通过控制每个元素的IElement.minSize、IElement.preferredSize、IElement.flexibleSize来进行控制"
     }) get controlSizeHeight() { return this._controlSizeHeight }
@@ -86,7 +88,7 @@ export class LayoutManager extends Manager {
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlScaleWidth: boolean = false
-    @(property as any)({
+    @property({
         group: { id: "0", name: "controlScale" },
         tooltip: "是否使用 x 缩放计算宽度"
     }) get controlScaleWidth() { return this._controlScaleWidth }
@@ -96,7 +98,7 @@ export class LayoutManager extends Manager {
         this.emit(Event.ON_CHANGED_LAYOUT_STATE)
     }
     @property private _controlScaleHeight: boolean = false
-    @(property as any)({
+    @property({
         group: { id: "0", name: "controlScale" },
         tooltip: "是否使用 y 缩放计算高度"
     }) get controlScaleHeight() { return this._controlScaleHeight }

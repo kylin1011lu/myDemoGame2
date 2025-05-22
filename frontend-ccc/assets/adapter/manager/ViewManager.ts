@@ -69,10 +69,10 @@ export class ViewManager<T = any> extends Manager {
         this._spacing = value
         this._resetAllState()
     }
-    @(property as any)({ group: { id: "padding", name: "padding" } }) left: number = 0
-    @(property as any)({ group: { id: "padding", name: "padding" } }) right: number = 0
-    @(property as any)({ group: { id: "padding", name: "padding" } }) top: number = 0
-    @(property as any)({ group: { id: "padding", name: "padding" } }) bottom: number = 0
+    @property({ group: { id: "padding", name: "padding" } }) left: number = 0
+    @property({ group: { id: "padding", name: "padding" } }) right: number = 0
+    @property({ group: { id: "padding", name: "padding" } }) top: number = 0
+    @property({ group: { id: "padding", name: "padding" } }) bottom: number = 0
     @property({
         tooltip: `磁性停靠
         开启后，会在增加数据时，根据设置进行自动滚动到顶部或底部`
