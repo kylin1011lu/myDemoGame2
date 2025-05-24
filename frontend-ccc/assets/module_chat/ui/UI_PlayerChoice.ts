@@ -32,6 +32,13 @@ export class UI_PlayerChoice extends Component {
     public onChoiceClick(event: Event, customEventData: string): void {
         log('onChoiceClick', customEventData);
         tgx.EventMgr.inst.emit(EventDef.CHOICE_PROCESS, customEventData);
+        this.disableAllChoice();
+    }
+
+    private disableAllChoice(): void {
+        for (let i = 0; i < this.choiceNodes.length; i++) {
+            this.choiceNodes[i].getComponent(Button).interactable = false;
+        }
     }
 }
 

@@ -1,12 +1,14 @@
 // assets/module_chat/ui/UI_Game.ts
 
-import { _decorator, Component, log, Node, UITransform } from 'cc';
-import { StoryNode, StoryNodeType } from './types/StoryDef';
+import { _decorator, Component, game, log, Node } from 'cc';
+import { StoryNodeType } from './types/StoryDef';
+
 import List from '../list/List';
 import { EventDef } from './types/EventDef';
 import { UI_ChatItem } from './UI_ChatItem';
 import { IUIChatChoiceData, IUIChatData, UIChatType } from './types/UIDef';
 import { StoryManager } from './manager/StoryManager';
+import { StoryNode } from './types/Story';
 
 const { ccclass, property } = _decorator;
 
@@ -21,6 +23,9 @@ export class UI_Game extends Component {
     private _chatList: (IUIChatData | IUIChatChoiceData)[] = [];
 
     protected onLoad(): void {
+
+        game.frameRate = 120;
+
         tgx.EventMgr.inst.on(EventDef.NODE_PROCESS, this.onNodeProcess, this);
         tgx.EventMgr.inst.on(EventDef.EFFECT_PROCESS, this.onEffectProcess, this);
         tgx.EventMgr.inst.on(EventDef.CHOICE_PROCESS, this.onChoiceProcess, this);
@@ -143,7 +148,7 @@ export class UI_Game extends Component {
             content: node.content[0]
         });
     }
-    
+
     private addChatItem(chat: IUIChatData): void {
         this._chatList.push(chat);
         this.list.numItems = this._chatList.length;

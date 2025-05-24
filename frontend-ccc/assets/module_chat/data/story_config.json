@@ -1,0 +1,39 @@
+{
+    "story_id": "STORY_0001",
+    "story_title": "与唐朝小公主的羁绊",
+    "host_name": "李明达",
+    "host_nickname": [
+        "晋阳公主",
+        "兕子"
+    ],
+    "host_description": "唐朝小公主，性格活泼开朗，喜欢冒险，喜欢交朋友。",
+    "host_link_start_value": 40,
+    "host_link_name": "羁绊",
+    "host_link_levels": [
+        {
+            "level_name": "初识",
+            "level_description": "与唐朝小公主的初识",
+            "level_link_value": 100
+        },
+        {
+            "level_name": "浅浅相知",
+            "level_description": "与唐朝小公主的浅浅相知",
+            "level_link_value": 200
+        },
+        {
+            "level_name": "心意相通",
+            "level_description": "与唐朝小公主的心意相通",
+            "level_link_value": 300
+        },
+        {
+            "level_name": "命运交织",
+            "level_description": "与唐朝小公主的命运交织",
+            "level_link_value": 400
+        },
+        {
+            "level_name": "牢不可破",
+            "level_description": "与唐朝小公主的牢不可破",
+            "level_link_value": 500
+        }   
+    ]
+}
