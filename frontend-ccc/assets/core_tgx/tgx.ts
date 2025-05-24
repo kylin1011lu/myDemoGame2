@@ -26,6 +26,7 @@ import { UIAlert as tgxUIAlert, Layout_UIAlert as tgxLayout_UIAlert } from "./ea
 import { Layout_UIWaiting as tgxLayout_UIWaiting } from "./easy_ui_framework/waiting/Layout_UIWaiting";
 import { UIWaiting as tgxUIWaiting } from "./easy_ui_framework/waiting/UIWaiting";
 import { EventDispatcher as tgxEventDispatcher } from "./easy_ui_framework/EventDispatcher";
+import { EventMgr as tgxEventMgr } from "./easy_ui_framework/EventMgr";
 import { UIController as tgxUIController } from "./easy_ui_framework/UIController";
 import { UILayers as tgxUILayers, UILayerNames as tgxUILayerNames } from "./easy_ui_framework/UILayers";
 import { UIMgr as tgxUIMgr } from "./easy_ui_framework/UIMgr";
@@ -86,6 +87,8 @@ namespace __tgx__ {
     export type UIWaiting = tgxUIWaiting;
     export const EventDispatcher = tgxEventDispatcher;
     type EventDispatcher = tgxEventDispatcher;
+    export const EventMgr = tgxEventMgr;
+    export type EventMgr = tgxEventMgr;
     export const UIController = tgxUIController;
     export type UIController = tgxUIController;
     export const UILayers = tgxUILayers;
@@ -161,6 +164,8 @@ declare global {
             type UIWaiting = tgxUIWaiting;
             const EventDispatcher: typeof tgxEventDispatcher;
             type EventDispatcher = tgxEventDispatcher;
+            const EventMgr: typeof tgxEventMgr;
+            type EventMgr = tgxEventMgr;
             const UIController: typeof tgxUIController;
             type UIController = tgxUIController;
             const UILayers: typeof tgxUILayers;
