@@ -67,6 +67,7 @@ export function parseScene(scene: ISceneData) {
                         label: 'CHOICE',
                         nodeType: 'CHOICE',
                         text: choice.text,
+                        effects: choice.effects,
                         choice_id: choice.choice_id
                     },
                 })

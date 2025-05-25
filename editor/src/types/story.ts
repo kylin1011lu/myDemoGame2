@@ -14,6 +14,10 @@ export enum StoryEffectType {
   LINK_VALUE_CHANGE = "LINK_VALUE_CHANGE",
 }
 
+export const StoryEffectTypeNames = {
+  [StoryEffectType.LINK_VALUE_CHANGE]: "关系值",
+}
+
 // 基础接口定义
 export interface IStoryData {
   story_id: string;
