@@ -9,7 +9,6 @@ import {
   useEdgesState,
   addEdge,
   Connection,
-  Panel,
   useNodesInitialized,
   ReactFlowProvider,
   useReactFlow,
@@ -167,12 +166,6 @@ const StoryEditorInner: React.FC = () => {
         >
           <Background />
           <Controls />
-          <Panel position="top-right">
-            <Space>
-              <Button>保存</Button>
-              <Button>导出</Button>
-            </Space>
-          </Panel>
         </ReactFlow>
       </div>
       <Drawer
