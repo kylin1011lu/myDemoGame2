@@ -9,6 +9,7 @@ interface PlayerChoiceNodeProps {
     nodeType: string
     content?: string[]
     choices?: { choice_id: string; text: string }[]
+    selected?: boolean
   }
 }
 
@@ -20,10 +21,10 @@ const PlayerChoiceNode: React.FC<PlayerChoiceNodeProps> = ({ data }) => {
       position: 'relative',
       minWidth: 200,
       maxWidth: 800,
-      border: '2px solid #faad14',
+      border: data.selected ? '3px solid #1890ff' : '2px solid #faad14',
       borderRadius: 8,
       background: '#fff',
-      boxShadow: '0 2px 8px #0001',
+      boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001',
       backgroundColor: 'rgba(255,255,255,0.4)',
       margin: '0 auto',
       boxSizing: 'border-box',

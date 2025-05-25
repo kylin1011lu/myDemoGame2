@@ -10,6 +10,7 @@ interface SystemPlayerDialogueNodeProps {
     emotion?: string
     characterId?: string
     choices?: { choice_id: string; text: string }[]
+    selected?: boolean
   }
 }
 
@@ -28,10 +29,10 @@ const SystemPlayerDialogueNode: React.FC<SystemPlayerDialogueNodeProps> = ({ dat
     <div style={{ 
       position: 'relative', 
       width: 240,
-      border: `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, 
+      border: data.selected ? '3px solid #1890ff' : `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`,
       borderRadius: 8, 
       background: '#fff', 
-      boxShadow: '0 2px 8px #0001',
+      boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001',
       boxSizing: 'border-box'
     }}>
       <Handle type="target" position={Position.Top} />

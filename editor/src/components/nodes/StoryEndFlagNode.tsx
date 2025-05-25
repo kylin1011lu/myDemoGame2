@@ -10,6 +10,7 @@ interface StoryEndFlagNodeProps {
     emotion?: string
     characterId?: string
     choices?: { choice_id: string; text: string }[]
+    selected?: boolean
   }
 }
 
@@ -25,7 +26,7 @@ const StoryEndFlagNode: React.FC<StoryEndFlagNodeProps> = ({ data }) => {
   const { label, nodeType, content, emotion, characterId } = data
 
   return (
-    <div style={{ position: 'relative', minWidth: 220, maxWidth: 320, width: 'fit-content', border: `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, borderRadius: 8, background: '#fff', boxShadow: '0 2px 8px #0001', margin: '0 auto', boxSizing: 'border-box' }}>
+    <div style={{ position: 'relative', minWidth: 220, maxWidth: 320, width: 'fit-content', border: data.selected ? '3px solid #1890ff' : `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, borderRadius: 8, background: '#fff', boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001', margin: '0 auto', boxSizing: 'border-box' }}>
       <Handle type="target" position={Position.Top} />
       <Card
         size="small"

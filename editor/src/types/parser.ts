@@ -1,13 +1,13 @@
 import { Edge, Node } from "@xyflow/react";
-import { Scene, StoryNode as StoryNodeType } from "./story";
 import { nodeNameToType } from "./define";
+import { INodeData, ISceneData } from "./story";
 
-export function parseScene(scene: Scene) {
+export function parseScene(scene: ISceneData) {
 
     const initialNodes: Node[] = []
     const initialEdges: Edge[] = []
     // 先构建节点id到节点的映射，方便查找上一个节点
-    const nodeIdMap = new Map<string, StoryNodeType>()
+    const nodeIdMap = new Map<string, INodeData>()
     scene.nodes.forEach((n) => nodeIdMap.set(n.node_id, n))
 
     // 记录每个节点的前驱节点id（用于连线）
@@ -27,7 +27,7 @@ export function parseScene(scene: Scene) {
         }
     })
 
-    scene.nodes.forEach((node: StoryNodeType) => {
+    scene.nodes.forEach((node: INodeData) => {
         if (node.node_type === 'PLAYER_CHOICE' && node.choices && node.choices.length > 0) {
             // 创建一个PLAYER_CHOICE节点
             initialNodes.push({
@@ -43,7 +43,8 @@ export function parseScene(scene: Scene) {
                     label: '请选择',
                     nodeType: 'PLAYER_CHOICE',
                     content: node.content,
-                    prompt: node.prompt
+                    prompt: node.prompt,
+                    choices: node.choices,
                 },
             })
 
@@ -76,7 +77,6 @@ export function parseScene(scene: Scene) {
                         id: `${choiceNodeId}-${choice.next_node_id}`,
                         source: choiceNodeId,
                         target: choice.next_node_id,
-                        animated: true,
                         style: { stroke: '#faad14' }
                     })
                 }
@@ -95,9 +95,8 @@ export function parseScene(scene: Scene) {
                     label: node.node_type,
                     nodeType: node.node_type,
                     content: node.content,
-                    emotion: node.emotion,
-                    characterId: node.character_id,
                     choices: node.choices,
+                    nextNodeId: node.next_node_id
                 },
             })
             if (node.next_node_id) {
@@ -105,7 +104,6 @@ export function parseScene(scene: Scene) {
                     id: `${node.node_id}-${node.next_node_id}`,
                     source: node.node_id,
                     target: node.next_node_id,
-                    animated: true,
                     style: { stroke: '#1890ff' }
                 })
             }

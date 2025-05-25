@@ -12,14 +12,22 @@ import {
   useNodesInitialized,
   ReactFlowProvider,
   useReactFlow,
+  Panel,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { Card, Button, Space, Drawer, Typography, message, List } from 'antd'
+import { Card, Button, Space, Typography, message, List } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Story } from '../types/story'
 import { MyNode, nodeTypes } from '../types/define'
 import { parseScene } from '../types/parser'
 import { caculateNodePositions } from '../utils/layout'
+import SystemMessageEditor from './editors/SystemMessageEditor'
+import HostDialogueEditor from './editors/HostDialogueEditor'
+import PlayerChoiceEditor from './editors/PlayerChoiceEditor'
+import SystemActionEditor from './editors/SystemActionEditor'
+import SystemPlayerDialogueEditor from './editors/SystemPlayerDialogueEditor'
+import StoryEndFlagEditor from './editors/StoryEndFlagEditor'
+import ChoiceEditor from './editors/ChoiceEditor'
+import { IStoryData } from '../types/story'
 const { Text, Title } = Typography
 
 const StoryEditorInner: React.FC = () => {
@@ -30,9 +38,10 @@ const StoryEditorInner: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nodesInitialized = useNodesInitialized();
   const calculateLayoutRef = useRef<() => void>();
-  const [storyData, setStoryData] = useState<Story | null>(null);
+  const [storyData, setStoryData] = useState<IStoryData | null>(null);
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
   const { setViewport } = useReactFlow();
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // 默认展示
   useEffect(() => {
@@ -68,6 +77,7 @@ const StoryEditorInner: React.FC = () => {
   )
 
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    setSelectedNodeId(node.id)
     setSelectedNode(node as MyNode)
   }, [])
 
@@ -91,7 +101,7 @@ const StoryEditorInner: React.FC = () => {
     const reader = new FileReader()
     reader.onload = (event) => {
       try {
-        const json = JSON.parse(event.target?.result as string) as Story
+        const json = JSON.parse(event.target?.result as string) as IStoryData
         if (!json.scenes || !json.scenes[0] || !json.scenes[0].nodes) {
           message.error('文件格式不正确')
           return
@@ -116,101 +126,139 @@ const StoryEditorInner: React.FC = () => {
     fileInputRef.current?.click()
   }, [])
 
+  // 节点高亮处理
+  const getNodeWithHighlight = (node: Node) => {
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        selected: node.id === selectedNodeId
+      }
+    }
+  }
+
+  // 编辑面板渲染
+  const renderNodeEditor = () => {
+    if (!selectedNode) return <div style={{ color: '#aaa', padding: 24 }}>请选择一个节点进行编辑</div>;
+    const handleNodeChange = (newNode: any) => {
+      setNodes((nds) =>
+        nds.map((n) => (n.id === selectedNode.id ? { ...n, ...newNode } : n))
+      );
+    };
+    switch (selectedNode.data.nodeType) {
+      case 'SYSTEM_MESSAGE':
+        return <SystemMessageEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'HOST_DIALOGUE':
+        return <HostDialogueEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'PLAYER_CHOICE':
+        return <PlayerChoiceEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'SYSTEM_ACTION':
+        return <SystemActionEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'SYSTEM_PLAYER_DIALOGUE':
+        return <SystemPlayerDialogueEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'STORY_END_FLAG':
+        return <StoryEndFlagEditor node={selectedNode} onChange={handleNodeChange} />;
+      case 'CHOICE':
+        return <ChoiceEditor node={selectedNode} onChange={handleNodeChange} />;
+      default:
+        return (
+          <div style={{ padding: 24 }}>
+            <div style={{ fontWeight: 600, marginBottom: 12 }}>节点ID：{selectedNode.id}</div>
+            <div style={{ marginBottom: 8 }}>类型：{selectedNode.data.nodeType}</div>
+            <div style={{ color: '#aaa' }}>（该类型节点编辑UI开发中...）</div>
+          </div>
+        );
+    }
+  };
+
+  const handlePaneClick = useCallback(() => {
+    setSelectedNode(null);
+    setSelectedNodeId(null);
+  }, []);
+
   return (
-    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#f5f5f5' }}>
-      <input
-        type="file"
-        accept=".json,application/json"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
-      <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, width: 300 }}>
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Button type="primary" onClick={handleLoadClick} icon={<PlusOutlined />} block>加载故事数据</Button>
-          {storyData && (
-            <>
-              <Title level={4}>{storyData.story_title}</Title>
-              <Text type="secondary">{storyData.description}</Text>
-              <List
-                size="small"
-                bordered
-                dataSource={storyData.scenes}
-                renderItem={(scene, index) => (
-                  <List.Item
-                    style={{ 
-                      cursor: 'pointer',
-                      background: currentSceneIndex === index ? '#e6f7ff' : 'transparent'
-                    }}
-                    onClick={() => handleSceneChange(index)}
-                  >
-                    <Text>{scene.scene_title}</Text>
-                  </List.Item>
-                )}
-              />
-            </>
-          )}
-        </Space>
-      </Card>
-      <div style={{ opacity: isVisible ? 1 : 0, width: '100vw', height: '100vh', overflow: 'auto' }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onNodeClick={onNodeClick}
-          nodeTypes={nodeTypes}
-          style={{ width: '100vw', height: '100vh' }}
-          defaultViewport={{ x: 0, y: 0, zoom: 1 }}
-        >
-          <Background />
-          <Controls />
-        </ReactFlow>
+    <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#f5f5f5', display: 'flex', flexDirection: 'row' }}>
+      {/* 左侧面板 */}
+      <div style={{ flex: 'none' }}>
+        <input
+          type="file"
+          accept=".json,application/json"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
+        <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, width: 300 }}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            <Button type="primary" onClick={handleLoadClick} icon={<PlusOutlined />} block>加载故事数据</Button>
+            {storyData && (
+              <>
+                <Title level={4}>{storyData.story_title}</Title>
+                <Text type="secondary">{storyData.description}</Text>
+                <List
+                  size="small"
+                  bordered
+                  dataSource={storyData.scenes}
+                  renderItem={(scene, index) => (
+                    <List.Item
+                      style={{ 
+                        cursor: 'pointer',
+                        background: currentSceneIndex === index ? '#e6f7ff' : 'transparent'
+                      }}
+                      onClick={() => handleSceneChange(index)}
+                    >
+                      <Text>{scene.scene_title}</Text>
+                    </List.Item>
+                  )}
+                />
+              </>
+            )}
+          </Space>
+        </Card>
       </div>
-      <Drawer
-        title="节点详情"
-        placement="right"
-        onClose={() => setSelectedNode(null)}
-        open={!!selectedNode}
-        width={400}
-      >
+      {/* 中间画布 */}
+      <div style={{ flex: 1, position: 'relative' }}>
+        <div style={{ opacity: isVisible ? 1 : 0, width: '100%', height: '100vh', overflow: 'auto' }}>
+          <ReactFlow
+            nodes={nodes.map(getNodeWithHighlight)}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onNodeClick={onNodeClick}
+            nodeTypes={nodeTypes}
+            style={{ width: '100%', height: '100vh' }}
+            defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+            onPaneClick={handlePaneClick}
+          >
+            <Background />
+            <Controls />
+            <Panel position="top-right">
+              <Space>
+                <Button>保存</Button>
+                <Button>导出</Button>
+              </Space>
+            </Panel>
+          </ReactFlow>
+        </div>
+        {/* 悬浮编辑面板 */}
         {selectedNode && (
-          <div>
-            <Text strong>节点ID：</Text>
-            <Text>{selectedNode.id}</Text>
-            <br />
-            <Text strong>节点类型：</Text>
-            <Text>{selectedNode.data.nodeType}</Text>
-            <br />
-            {selectedNode.data.characterId && (
-              <>
-                <Text strong>角色ID：</Text>
-                <Text>{selectedNode.data.characterId}</Text>
-                <br />
-              </>
-            )}
-            {selectedNode.data.emotion && (
-              <>
-                <Text strong>情绪：</Text>
-                <Text>{selectedNode.data.emotion}</Text>
-                <br />
-              </>
-            )}
-            {selectedNode.data.content && (
-              <>
-                <Text strong>内容：</Text>
-                <br />
-                {selectedNode.data.content.map((text: string, index: number) => (
-                  <Text key={index} style={{ display: 'block', marginBottom: 8 }}>
-                    {text}
-                  </Text>
-                ))}
-              </>
-            )}
+          <div style={{
+            position: 'absolute',
+            top: 60,
+            right: 15,
+            zIndex: 100,
+            width: 340,
+            background: '#fff',
+            borderRadius: 10,
+            border: '1px solid #eee',
+            padding: 0,
+            overflow: 'visible',
+            minHeight: 60
+          }}>
+            {renderNodeEditor()}
           </div>
         )}
-      </Drawer>
+      </div>
     </div>
   )
 }

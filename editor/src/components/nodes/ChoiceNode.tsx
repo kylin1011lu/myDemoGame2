@@ -7,6 +7,7 @@ interface ChoiceNodeProps {
     nodeType: string
     text: string
     choice_id: string
+    selected: boolean
   }
 }
 
@@ -14,18 +15,18 @@ const ChoiceNode: React.FC<ChoiceNodeProps> = ({ data }) => {
   const { text } = data
 
   return (
-    <div style={{ 
-      position: 'relative', 
-      minWidth: 120, 
-      maxWidth: 200, 
-      width: 'fit-content', 
-      border: '1px solid #ffd591', 
-      borderRadius: 4, 
-      background: '#fff7e6', 
-      boxShadow: '0 2px 8px #0001', 
-      margin: '0 auto', 
+    <div style={{
+      position: 'relative',
+      minWidth: 120,
+      maxWidth: 320,
+      width: 'fit-content',
+      border: data.selected ? '3px solid #1890ff' : '2px solid #faad14',
+      borderRadius: 8,
+      background: '#fff',
+      boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001',
+      margin: '0 auto',
       boxSizing: 'border-box',
-      padding: '8px 12px',
+      padding: 4,
       cursor: 'pointer',
       transition: 'all 0.3s'
     }}>

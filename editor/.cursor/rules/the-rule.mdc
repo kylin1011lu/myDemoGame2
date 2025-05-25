@@ -1,6 +1,6 @@
 ---
-description: 
+description: 使用agent模式，每次提问请自行修改代码。
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 如果写完代码后，不需要调用运行命令，只需要只出可以运行了，并展示相关的命令即可。
