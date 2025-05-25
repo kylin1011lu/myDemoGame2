@@ -137,6 +137,13 @@ const StoryEditorInner: React.FC = () => {
     }
   }
 
+  // 新增：用于高亮choiceNode
+  const handleSelectChoiceNode = (choiceNodeId: string) => {
+    setSelectedNodeId(choiceNodeId);
+    const node = nodes.find(node => node.id === choiceNodeId);
+    setSelectedNode(node as MyNode)
+  };
+
   // 编辑面板渲染
   const renderNodeEditor = () => {
     if (!selectedNode) return <div style={{ color: '#aaa', padding: 24 }}>请选择一个节点进行编辑</div>;
@@ -151,7 +158,7 @@ const StoryEditorInner: React.FC = () => {
       case 'HOST_DIALOGUE':
         return <HostDialogueEditor node={selectedNode} onChange={handleNodeChange} />;
       case 'PLAYER_CHOICE':
-        return <PlayerChoiceEditor node={selectedNode} onChange={handleNodeChange} />;
+        return <PlayerChoiceEditor node={selectedNode} onChange={handleNodeChange} onSelectChoiceNode={handleSelectChoiceNode} />;
       case 'SYSTEM_ACTION':
         return <SystemActionEditor node={selectedNode} onChange={handleNodeChange} />;
       case 'SYSTEM_PLAYER_DIALOGUE':
