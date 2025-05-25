@@ -34,7 +34,7 @@ const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Tag color={nodeTypeColors[nodeType] || 'default'}>
-              {nodeType}
+              {'宿主'}
             </Tag>
             {characterId && <Tag color="cyan" style={{ maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={characterId}>{characterId}</Tag>}
           </div>

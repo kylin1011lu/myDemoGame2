@@ -3,8 +3,6 @@ export interface StoryNode {
   node_type: string
   content?: string[]
   next_node_id?: string
-  character_id?: string
-  emotion?: string
   prompt?: string
   choices?: {
     choice_id: string
@@ -13,7 +11,6 @@ export interface StoryNode {
     effects?: {
       type: string
       value: any
-      target?: string
     }[]
   }[]
   action_type?: string

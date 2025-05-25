@@ -54,7 +54,7 @@ const SystemPlayerDialogueNode: React.FC<SystemPlayerDialogueNodeProps> = ({ dat
             marginBottom: 8
           }}>
             <Tag color={nodeTypeColors[nodeType] || 'default'}>
-              {nodeType}
+              {'玩家选择'}
             </Tag>
             {characterId && (
               <Tag 

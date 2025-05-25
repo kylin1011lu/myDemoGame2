@@ -12,6 +12,7 @@ import {
   Panel,
   useNodesInitialized,
   ReactFlowProvider,
+  useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { Card, Button, Space, Drawer, Typography, message, List } from 'antd'
@@ -32,6 +33,7 @@ const StoryEditorInner: React.FC = () => {
   const calculateLayoutRef = useRef<() => void>();
   const [storyData, setStoryData] = useState<Story | null>(null);
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
+  const { setViewport } = useReactFlow();
 
   // 默认展示
   useEffect(() => {
@@ -95,6 +97,7 @@ const StoryEditorInner: React.FC = () => {
           message.error('文件格式不正确')
           return
         }
+        setViewport({ x: 0, y: 0, zoom: 1 })
         setStoryData(json);
         setCurrentSceneIndex(0);
         setIsVisible(false)

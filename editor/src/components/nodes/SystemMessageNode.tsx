@@ -34,7 +34,7 @@ const SystemMessageNode: React.FC<SystemMessageNodeProps> = ({ data }) => {
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Tag color={nodeTypeColors[nodeType] || 'default'}>
-              {nodeType}
+              {'系统提示'}
             </Tag>
             {characterId && <Tag color="cyan" style={{ maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={characterId}>{characterId}</Tag>}
           </div>

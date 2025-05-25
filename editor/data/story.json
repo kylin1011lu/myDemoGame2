@@ -197,7 +197,9 @@
             "treatment_level": "PRIMARY",
             "energy_cost": 100
           },
-          "feedback_message_to_player": "治疗中...",
+          "content": [
+            "治疗中..."
+          ],
           "next_node_id": "NODE_ACT1_012"
         },
         {
