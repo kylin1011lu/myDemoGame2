@@ -42,7 +42,10 @@ const StoryEditorInner: React.FC = () => {
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
   const { setViewport } = useReactFlow();
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const { getNodes } = useReactFlow();
 
+
+  // console.log('nodes', nodes.length);
   // 默认展示
   useEffect(() => {
     setIsVisible(true)
@@ -86,12 +89,13 @@ const StoryEditorInner: React.FC = () => {
     if (!storyData) return;
     setCurrentSceneIndex(index);
     setIsVisible(false);
+    setViewport({ x: 0, y: 0, zoom: 1 });
     const { initialNodes, initialEdges } = parseScene(storyData.scenes[index]);
     setNodes(initialNodes);
     setEdges(initialEdges);
     setTimeout(() => {
       setIsVisible(true);
-    }, 200);
+    }, 500);
   }, [storyData, setNodes, setEdges]);
 
   // 文件选择并解析
@@ -138,16 +142,61 @@ const StoryEditorInner: React.FC = () => {
   }
 
   // 新增：用于高亮choiceNode
-  const handleSelectChoiceNode = (choiceNodeId: string) => {
+  const handleSelectChoiceNode = useCallback((choiceNodeId: string) => {
     setSelectedNodeId(choiceNodeId);
-    const node = nodes.find(node => node.id === choiceNodeId);
-    setSelectedNode(node as MyNode)
-  };
+    const node = getNodes().find(node => node.id === choiceNodeId);
+    
+    if (!node) {
+      console.warn(`节点不存在: ${choiceNodeId}`);
+      return;
+    }
+    
+    setSelectedNode(node as MyNode);
+  }, [getNodes]); // 添加 nodes 作为依赖项
 
   // 编辑面板渲染
   const renderNodeEditor = () => {
     if (!selectedNode) return <div style={{ color: '#aaa', padding: 24 }}>请选择一个节点进行编辑</div>;
-    const handleNodeChange = (newNode: any) => {
+    const handleNodeChange = (newNode: any, opInfo?: any) => {
+      // 针对PLAYER_CHOICE节点，处理choiceNode的增删
+      if (selectedNode?.data.nodeType === 'PLAYER_CHOICE' && opInfo) {
+        setNodes((nds) => {
+          let updatedNodes = nds.map((n) => (n.id === selectedNode.id ? { ...n, ...newNode } : n));
+          if (opInfo.type === 'add') {
+            // 新增ChoiceNode
+            const choice = opInfo.choice;
+            updatedNodes.push({
+              id: choice.choice_id,
+              type: 'choiceNode',
+              parentId: selectedNode.id,
+              extent: 'parent',
+              draggable: false,
+              position: { x: 0, y: 0 },
+              data: {
+                level: 0,
+                label: 'CHOICE',
+                nodeType: 'CHOICE',
+                text: choice.text,
+                choice_id: choice.choice_id
+              }
+            });
+          } else if (opInfo.type === 'remove') {
+            // 删除ChoiceNode
+            const choiceId = opInfo.choiceId;
+            updatedNodes = updatedNodes.filter(n => n.id !== choiceId);
+          }
+          return updatedNodes;
+        });
+
+        setEdges((eds) => {
+          if(opInfo.type === 'remove'){
+            return eds.filter(e => e.source !== opInfo.choiceId);
+          }
+          return eds;
+        });
+
+        return;
+      }
       setNodes((nds) =>
         nds.map((n) => (n.id === selectedNode.id ? { ...n, ...newNode } : n))
       );

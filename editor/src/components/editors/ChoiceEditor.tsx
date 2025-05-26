@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Input, Form, Button, Select, InputNumber, Space, message } from 'antd';
 import { Node } from '@xyflow/react';
-import { StoryEffectTypeNames } from '../../types/story';
+import { StoryEffectType, StoryEffectTypeNames } from '../../types/story';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ChoiceEditorProps {
@@ -23,7 +23,7 @@ const EffectList: React.FC<{
     // 添加新效果
     const handleAddEffect = () => {
         const newEffect: Effect = {
-            type: '',
+            type: StoryEffectType.LINK_VALUE_CHANGE,
             value: 0,
             id: `effect-${uuidv4()}`
         };
@@ -175,11 +175,6 @@ const ChoiceEditor: React.FC<ChoiceEditorProps> = ({ node, onChange }) => {
             <Form.Item label="选项内容" name="text">
                 <Input />
             </Form.Item>
-
-            <Form.Item label="选项ID" name="choice_id">
-                <Input disabled />
-            </Form.Item>
-
             {/* 使用自定义效果列表组件代替 Form.List */}
             <EffectList
                 effects={effectsList}

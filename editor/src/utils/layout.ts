@@ -8,16 +8,7 @@ interface Position {
   y: number
 }
 
-export const caculateNodePositions = (nodes: Node[]): Record<string, Position> => {
-  const VERTICAL_SPACING = 50 // 恢复垂直间距
-  let currentY = 0
-
-  // 获取ReactFlow容器的尺寸
-  const flowContainer = document.querySelector('.react-flow')
-  if (!flowContainer) return {};
-  const containerRect = flowContainer.getBoundingClientRect()
-  const containerCenterX = containerRect.width / 2
-
+export const caculateChoicePositions = (nodes: Node[]): { choicePostions: Record<string, Position>, parentWidths: Record<string, number> } => {
   // 通过计算choiceNode所有子节点的宽度，来计算父节点的宽度
   let nodesHasChild: { [key: string]: Node[] } = {};
   nodes.map((node) => {
@@ -87,6 +78,24 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
       parentWidths[parentNode.id] = totoalWidth;
     }
   })
+
+  return {
+    choicePostions,
+    parentWidths
+  };
+}
+
+export const caculateNodePositions = (nodes: Node[]): Record<string, Position> => {
+  const VERTICAL_SPACING = 50 // 恢复垂直间距
+  let currentY = 0
+
+  // 获取ReactFlow容器的尺寸
+  const flowContainer = document.querySelector('.react-flow')
+  if (!flowContainer) return {};
+  const containerRect = flowContainer.getBoundingClientRect()
+  const containerCenterX = containerRect.width / 2
+
+  let { choicePostions, parentWidths } = caculateChoicePositions(nodes);
 
   let levelNodes: { [key: number]: MyNode[] } = {};
 

@@ -20,7 +20,7 @@ const ChoiceNode: React.FC<ChoiceNodeProps> = ({ data }) => {
     <div style={{
       position: 'relative',
       minWidth: 120,
-      maxWidth: 320,
+      maxWidth: 240,
       width: 'fit-content',
       border: data.selected ? '3px solid #1890ff' : '2px solid #faad14',
       borderRadius: 8,

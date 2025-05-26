@@ -21,7 +21,7 @@ export function parseScene(scene: ISceneData) {
             n.choices.forEach((choice, idx) => {
                 if (choice.next_node_id) {
                     if (!prevMap.has(choice.next_node_id)) prevMap.set(choice.next_node_id, [])
-                    prevMap.get(choice.next_node_id)!.push(`${n.node_id}-choice-${idx}`)
+                    prevMap.get(choice.next_node_id)!.push(choice.choice_id)
                 }
             })
         }
@@ -50,10 +50,9 @@ export function parseScene(scene: ISceneData) {
 
             // 为每个choice创建一个独立的节点
             const choices = node.choices
-            choices.forEach((choice, idx) => {
-                const choiceNodeId = `${node.node_id}-choice-${idx}`
+            choices.forEach((choice) => {
                 initialNodes.push({
-                    id: choiceNodeId,
+                    id: choice.choice_id,
                     type: 'choiceNode',
                     parentId: node.node_id,
                     extent: 'parent',
@@ -75,8 +74,8 @@ export function parseScene(scene: ISceneData) {
                 // 如果choice有next_node_id，添加从CHOICE到next_node的连接
                 if (choice.next_node_id) {
                     initialEdges.push({
-                        id: `${choiceNodeId}-${choice.next_node_id}`,
-                        source: choiceNodeId,
+                        id: `${choice.choice_id}-${choice.next_node_id}`,
+                        source: choice.choice_id,
                         target: choice.next_node_id,
                         style: { stroke: '#faad14' }
                     })
