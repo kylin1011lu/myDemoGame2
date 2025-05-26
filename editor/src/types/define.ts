@@ -30,7 +30,7 @@ export const nodeNameToType: Record<string, string> = {
 export interface MyNodeData {
     [key: string]: string | string[] | null;
     preIds: string[];
-    level: string;
+    level: string; //实际设置的是number
     label: string;
     nodeType: string;
     content: string[];

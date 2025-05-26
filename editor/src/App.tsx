@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
-import StoryEditor from './components/StoryEditor'
+import StoryEditor from './components/StoryEditor/index'
 
 const { Header, Content } = Layout
 

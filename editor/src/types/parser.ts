@@ -112,7 +112,7 @@ export function parseScene(scene: ISceneData) {
     })
 
     // first node level is 0
-    initialNodes[0].data.level = "0";
+    initialNodes[0].data.level = 0;
 
     // 根据Edges计算每个节点的level
     initialEdges.forEach((edge) => {
@@ -130,7 +130,7 @@ export function parseScene(scene: ISceneData) {
             if (targetNode.type == "playerChoiceNode" && targetNode.data.level != 0) {
                 // 不处理
             } else {
-                targetNode.data.level = (Math.max(Number(targetNode.data.level || 0), Number(sourceNode.data.level || 0) + 1)) + "";
+                targetNode.data.level = (Math.max(Number(targetNode.data.level || 0), Number(sourceNode.data.level || 0) + 1));
             }
         }
     })
