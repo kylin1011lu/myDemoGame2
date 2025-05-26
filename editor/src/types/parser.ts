@@ -96,7 +96,8 @@ export function parseScene(scene: ISceneData) {
                     nodeType: node.node_type,
                     content: node.content,
                     choices: node.choices,
-                    nextNodeId: node.next_node_id
+                    nextNodeId: node.next_node_id,
+                    parameters: node.parameters
                 },
             })
             if (node.next_node_id) {

@@ -28,6 +28,8 @@ import SystemPlayerDialogueEditor from './editors/SystemPlayerDialogueEditor'
 import StoryEndFlagEditor from './editors/StoryEndFlagEditor'
 import ChoiceEditor from './editors/ChoiceEditor'
 import { IStoryData } from '../types/story'
+import { saveAs } from 'file-saver'
+import { checkOrphanNodes } from '../utils/storyExport'
 const { Text, Title } = Typography
 
 const StoryEditorInner: React.FC = () => {
@@ -232,6 +234,59 @@ const StoryEditorInner: React.FC = () => {
     setSelectedNodeId(null);
   }, []);
 
+  const exportCurrentScene = () => {
+    if (!storyData) return;
+    const scene = storyData.scenes[currentSceneIndex];
+    // 1. 检查孤立节点
+    const orphanNodes = checkOrphanNodes(nodes, edges, storyData.start_node_id);
+    console.log(orphanNodes);
+    if (orphanNodes.length > 0) {
+      message.error(`存在${orphanNodes.length}个孤立节点，无法导出！`);
+      return;
+    }
+    // 2. 组装nodes为json结构
+    const exportNodes = nodes.filter(n => n.type !== 'choiceNode').map(n => {
+      const d = n.data;
+      // 还原choices
+      let choices = undefined;
+      if (d.nodeType === 'PLAYER_CHOICE' && Array.isArray(d.choices)) {
+        choices = d.choices.map((c: any) => ({
+          choice_id: c.choice_id,
+          text: c.text,
+          next_node_id: c.next_node_id,
+          effects: c.effects
+        }));
+      }
+      return {
+        node_id: n.id,
+        node_type: d.nodeType,
+        content: d.content,
+        character_id: d.characterId || d.character_id,
+        prompt: d.prompt,
+        choices,
+        action_type: d.action_type,
+        parameters: d.parameters,
+        feedback_message_to_player: d.feedback_message_to_player,
+        next_node_id: d.nextNodeId || d.next_node_id || null,
+        effects: d.effects
+      };
+    });
+    const exportScene = {
+      scene_id: scene.scene_id,
+      scene_title: scene.scene_title,
+      nodes: exportNodes
+    };
+    // 3. 组装完整story结构
+    const exportStory = {
+      ...storyData,
+      scenes: storyData.scenes.map((s, idx) => idx === currentSceneIndex ? exportScene : s)
+    };
+    // 4. 导出为json文件
+    const blob = new Blob([JSON.stringify(exportStory, null, 2)], { type: 'application/json' });
+    saveAs(blob, `${storyData.story_title || 'story'}.json`);
+    message.success('导出成功！');
+  };
+
   return (
     <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', background: '#f5f5f5', display: 'flex', flexDirection: 'row' }}>
       {/* 左侧面板 */}
@@ -291,7 +346,7 @@ const StoryEditorInner: React.FC = () => {
             <Panel position="top-right">
               <Space>
                 <Button>保存</Button>
-                <Button>导出</Button>
+                <Button onClick={exportCurrentScene}>导出</Button>
               </Space>
             </Panel>
           </ReactFlow>
