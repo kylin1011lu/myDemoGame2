@@ -40,19 +40,31 @@ const FlowCanvas: React.FC = () => {
       message.error(`存在${orphanNodes.length}个孤立节点，无法导出！`);
       return;
     }
+
+    // 移除null字段的辅助函数
+    const removeNullFields = (obj: any) => {
+      const result: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (value !== null && value !== undefined) {
+          result[key] = value;
+        }
+      }
+      return result;
+    };
+
     // 组装nodes为json结构
     const exportNodes = nodes.filter(n => n.type !== 'choiceNode').map(n => {
       const d = n.data;
       let choices = undefined;
       if (d.nodeType === 'PLAYER_CHOICE' && Array.isArray(d.choices)) {
-        choices = d.choices.map((c: any) => ({
+        choices = d.choices.map((c: any) => (removeNullFields({
           choice_id: c.choice_id,
           text: c.text,
           next_node_id: c.next_node_id,
           effects: c.effects
-        }));
+        })));
       }
-      return {
+      let node = removeNullFields({
         node_id: n.id,
         node_type: d.nodeType,
         content: d.content,
@@ -62,9 +74,10 @@ const FlowCanvas: React.FC = () => {
         action_type: d.action_type,
         parameters: d.parameters,
         feedback_message_to_player: d.feedback_message_to_player,
-        next_node_id: d.nextNodeId || d.next_node_id || null,
-        effects: d.effects
-      };
+        effects: d.effects,
+        next_node_id: d.nextNodeId || d.next_node_id || null
+      });
+      return node;
     });
     const exportScene = {
       scene_id: scene.scene_id,
