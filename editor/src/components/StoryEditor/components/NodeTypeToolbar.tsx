@@ -4,7 +4,7 @@ import React from 'react';
 const nodeTypeList = [
   {
     type: 'SYSTEM_MESSAGE',
-    label: '系统消息',
+    label: '系统提示',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="2" fill="#fff" stroke="#333" strokeWidth="2"/><rect x="7" y="9" width="10" height="2" rx="1" fill="#333"/><rect x="7" y="13" width="6" height="2" rx="1" fill="#bbb"/></svg>
     )
@@ -25,14 +25,14 @@ const nodeTypeList = [
   },
   {
     type: 'SYSTEM_ACTION',
-    label: '系统动作',
+    label: '系统操作',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="#fff" stroke="#333" strokeWidth="2"/><path d="M8 12h8" stroke="#f90" strokeWidth="2"/><circle cx="12" cy="12" r="2" fill="#f90"/></svg>
     )
   },
   {
     type: 'SYSTEM_PLAYER_DIALOGUE',
-    label: '系统玩家',
+    label: '玩家选择',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3" fill="#fff" stroke="#333" strokeWidth="2"/><rect x="7" y="14" width="10" height="4" rx="2" fill="#fff" stroke="#333" strokeWidth="2"/></svg>
     )
@@ -47,10 +47,9 @@ const nodeTypeList = [
 ];
 
 interface Props {
-  onAddNode: (type: string) => void;
 }
 
-const NodeTypeToolbar: React.FC<Props> = ({ onAddNode }) => {
+const NodeTypeToolbar: React.FC<Props> = ({ }) => {
   return (
     <div style={{
       position: 'absolute',
@@ -75,7 +74,7 @@ const NodeTypeToolbar: React.FC<Props> = ({ onAddNode }) => {
             background: 'none',
             border: 'none',
             padding: 0,
-            cursor: 'pointer',
+            cursor: 'grab',
             outline: 'none',
             width: 40,
             height: 40,
@@ -85,7 +84,11 @@ const NodeTypeToolbar: React.FC<Props> = ({ onAddNode }) => {
             borderRadius: 8,
             transition: 'background 0.2s',
           }}
-          onClick={() => onAddNode(item.type)}
+          draggable
+          onDragStart={e => {
+            e.dataTransfer.setData('application/node-type', item.type);
+            e.dataTransfer.effectAllowed = 'move';
+          }}
         >
           {item.icon}
         </button>

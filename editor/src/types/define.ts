@@ -37,7 +37,8 @@ export interface MyNodeData {
     emotion: string;
     characterId: string;
     choices: string[];
-    prompt: string
+    prompt: string;
+    createdType: string; // 创建类型，用于区分是导入还是新建 导入为import，新建为create
 }
 
 export type MyNode = Node<MyNodeData, 'data'>;

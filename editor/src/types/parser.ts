@@ -45,6 +45,7 @@ export function parseScene(scene: ISceneData) {
                     content: node.content,
                     prompt: node.prompt,
                     choices: node.choices,
+                    createdType: 'import'
                 },
             })
 
@@ -67,7 +68,8 @@ export function parseScene(scene: ISceneData) {
                         nodeType: 'CHOICE',
                         text: choice.text,
                         effects: choice.effects,
-                        choice_id: choice.choice_id
+                        choice_id: choice.choice_id,
+                        createdType: 'import'
                     },
                 })
 
@@ -97,7 +99,8 @@ export function parseScene(scene: ISceneData) {
                     content: node.content,
                     choices: node.choices,
                     nextNodeId: node.next_node_id,
-                    parameters: node.parameters
+                    parameters: node.parameters,
+                    createdType: 'import'
                 },
             })
             if (node.next_node_id) {

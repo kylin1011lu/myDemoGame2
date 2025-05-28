@@ -101,25 +101,29 @@ const FlowCanvas: React.FC = () => {
     calculateLayout();
   };
 
-  // 新增节点
-  const handleAddNode = (type: string) => {
-    if (!nodeNameToType[type]) {
-      message.error(`${type}节点类型不存在！`);
-      return;
-    }
-    // 生成唯一id
+  // 画布拖拽放置新节点
+  const onDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  };
+
+  const onDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const type = event.dataTransfer.getData('application/node-type');
+    if (!type || !nodeNameToType[type]) return;
+    // 画布坐标转换
+    const reactFlowBounds = (event.target as HTMLDivElement).getBoundingClientRect();
+    const x = event.clientX - reactFlowBounds.left;
+    const y = event.clientY - reactFlowBounds.top;
     const id = `${type}_${Date.now()}`;
-    // 默认内容
     const defaultData: any = {
       nodeType: type,
       label: type,
       content: [],
       preIds: [],
-      level: 0
+      level: 0,
+      createdType: 'create'
     };
-    // 画布中心
-    const x = window.innerWidth / 2 + Math.random() * 40 - 20;
-    const y = window.innerHeight / 2 + Math.random() * 40 - 20;
     setNodes((nds: any[]) => [
       ...nds,
       {
@@ -146,6 +150,8 @@ const FlowCanvas: React.FC = () => {
           style={{ width: '100%', height: '100vh' }}
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
           onPaneClick={handlePaneClick}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
         >
           <Background />
           <Controls position="bottom-right" />
@@ -157,7 +163,7 @@ const FlowCanvas: React.FC = () => {
             </Space>
           </Panel>
         </ReactFlow>
-        <NodeTypeToolbar onAddNode={handleAddNode} />
+        <NodeTypeToolbar />
       </div>
     </div>
   );
