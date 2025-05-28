@@ -40,7 +40,7 @@ export function parseScene(scene: ISceneData) {
                 data: {
                     preIds: prevMap.get(node.node_id) || [],
                     level: 0,
-                    label: '请选择',
+                    label: 'PLAYER_CHOICE',
                     nodeType: 'PLAYER_CHOICE',
                     content: node.content,
                     prompt: node.prompt,

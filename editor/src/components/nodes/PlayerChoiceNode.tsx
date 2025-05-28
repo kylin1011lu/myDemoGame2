@@ -37,7 +37,7 @@ const PlayerChoiceNode: React.FC<PlayerChoiceNodeProps> = ({ data }) => {
         style={{ boxShadow: 'none', background: 'transparent', minWidth: 260, maxWidth: 780, width: '100%', border: 'none', padding: 0, height: '100%' }}
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'nowrap' }}>
-            <Tag color="orange">{label}</Tag>
+            <Tag color="orange">玩家选项</Tag>
             {prompt && (
               <span style={{ color: '#faad14', fontWeight: 500, fontSize: 14, whiteSpace: 'pre-line', border: '1px solid #ffa940', borderRadius: 4, padding: '0 8px', background: '#fffbe6', minHeight: 22, display: 'inline-flex', alignItems: 'center' }}>{prompt}</span>
             )}

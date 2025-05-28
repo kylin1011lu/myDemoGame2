@@ -1,8 +1,9 @@
 import React from 'react';
 import { ReactFlow, Background, Controls, Panel } from '@xyflow/react';
 import { Button, Space, message } from 'antd';
-import { nodeTypes } from '../../../types/define';
+import { nodeNameToType, nodeTypes } from '../../../types/define';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
+import NodeTypeToolbar from './NodeTypeToolbar';
 
 const FlowCanvas: React.FC = () => {
   const {
@@ -100,6 +101,37 @@ const FlowCanvas: React.FC = () => {
     calculateLayout();
   };
 
+  // 新增节点
+  const handleAddNode = (type: string) => {
+    if (!nodeNameToType[type]) {
+      message.error(`${type}节点类型不存在！`);
+      return;
+    }
+    // 生成唯一id
+    const id = `${type}_${Date.now()}`;
+    // 默认内容
+    const defaultData: any = {
+      nodeType: type,
+      label: type,
+      content: [],
+      preIds: [],
+      level: 0
+    };
+    // 画布中心
+    const x = window.innerWidth / 2 + Math.random() * 40 - 20;
+    const y = window.innerHeight / 2 + Math.random() * 40 - 20;
+    setNodes((nds: any[]) => [
+      ...nds,
+      {
+        id,
+        type: nodeNameToType[type],
+        position: { x, y },
+        data: defaultData
+      }
+    ]);
+    setSelectedNodeId(id);
+  };
+
   return (
     <div style={{ flex: 1, position: 'relative' }}>
       <div style={{ opacity: isVisible ? 1 : 0, width: '100%', height: '100vh', overflow: 'auto' }}>
@@ -116,7 +148,7 @@ const FlowCanvas: React.FC = () => {
           onPaneClick={handlePaneClick}
         >
           <Background />
-          <Controls />
+          <Controls position="bottom-right" />
           <Panel position="top-right">
             <Space>
               <Button onClick={refresh}>刷新</Button>
@@ -125,6 +157,7 @@ const FlowCanvas: React.FC = () => {
             </Space>
           </Panel>
         </ReactFlow>
+        <NodeTypeToolbar onAddNode={handleAddNode} />
       </div>
     </div>
   );

@@ -60,7 +60,6 @@ const StoryEndFlagNode: React.FC<StoryEndFlagNodeProps> = ({ data }) => {
           )}
         </div>
       </Card>
-      <Handle type="source" position={Position.Bottom} />
     </div>
   )
 }
