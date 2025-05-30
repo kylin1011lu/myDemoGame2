@@ -1,5 +1,5 @@
 import React from 'react'
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useNodeConnections } from '@xyflow/react'
 import { StoryEffectType, StoryEffectTypeNames } from '../../types/story'
 
 interface ChoiceNodeProps {
@@ -41,6 +41,7 @@ const ChoiceNode: React.FC<ChoiceNodeProps> = ({ data }) => {
           height: 8,
           bottom: -4
         }}
+        isConnectable={useNodeConnections({ handleType: 'source' }).length < 1}
       />
       <p style={{
         margin: 0,

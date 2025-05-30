@@ -1,5 +1,5 @@
 import React from 'react'
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useNodeConnections } from '@xyflow/react'
 import { Card, Tag } from 'antd'
 
 interface SystemPlayerDialogueNodeProps {
@@ -35,7 +35,7 @@ const SystemPlayerDialogueNode: React.FC<SystemPlayerDialogueNodeProps> = ({ dat
       boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001',
       boxSizing: 'border-box'
     }}>
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={Position.Top} isConnectable={useNodeConnections({ handleType: 'target' }).length < 1}   />
       <Card
         size="small"
         variant="borderless"
@@ -124,7 +124,7 @@ const SystemPlayerDialogueNode: React.FC<SystemPlayerDialogueNodeProps> = ({ dat
           )}
         </div>
       </Card>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} isConnectable={useNodeConnections({ handleType: 'source' }).length < 1} />
     </div>
   )
 }

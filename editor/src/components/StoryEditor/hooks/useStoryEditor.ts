@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { Node, Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, applyNodeChanges, applyEdgeChanges, useNodesInitialized } from '@xyflow/react';
+import { Node, Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, applyNodeChanges, applyEdgeChanges, useNodesInitialized, useReactFlow } from '@xyflow/react';
 import { IStoryData } from '../../../types/story';
 import { parseScene } from '../../../types/parser';
 import { caculateNodePositions } from '../../../utils/layout';
@@ -15,6 +15,7 @@ export function useStoryEditor() {
   const [isVisible, setIsVisible] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nodesInitialized = useNodesInitialized();
+  const { screenToFlowPosition } = useReactFlow();
 
   // 默认展示
   useEffect(() => {
@@ -117,6 +118,7 @@ export function useStoryEditor() {
     onEdgesChange,
     onNodeClick,
     handleSelectChoiceNode,
-    getOrphanNodes
+    getOrphanNodes,
+    screenToFlowPosition
   };
 } 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useNodeConnections } from '@xyflow/react'
 import { Card, Tag } from 'antd'
 
 interface HostDialogueNodeProps {
@@ -27,7 +27,14 @@ const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
 
   return (
     <div style={{ position: 'relative', minWidth: 220, maxWidth: 320, width: 'fit-content', border: data.selected ? '3px solid #1890ff' : `2px solid ${nodeTypeColors[nodeType] || '#d9d9d9'}`, borderRadius: 8, background: '#fff', boxShadow: data.selected ? '0 0 0 3px #bae7ff' : '0 2px 8px #0001', margin: '0 auto', boxSizing: 'border-box' }}>
-      <Handle type="target" position={Position.Top} />
+      <Handle type="target"
+        position={Position.Top}
+        style={{
+          background: '#faad14',
+          width: 10,
+          height: 10,
+        }}
+      />
       <Card
         size="small"
         variant="borderless"
@@ -60,7 +67,7 @@ const HostDialogueNode: React.FC<HostDialogueNodeProps> = ({ data }) => {
           )}
         </div>
       </Card>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} isConnectable={useNodeConnections({ handleType: 'source' }).length < 1} />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useNodeConnections } from '@xyflow/react'
 import { Card, Tag } from 'antd'
 
 interface SystemMessageNodeProps {
@@ -60,7 +60,7 @@ const SystemMessageNode: React.FC<SystemMessageNodeProps> = ({ data }) => {
           )}
         </div>
       </Card>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} isConnectable={useNodeConnections({ handleType: 'source' }).length < 1} />
     </div>
   )
 }

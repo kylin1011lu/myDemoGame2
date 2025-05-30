@@ -14,7 +14,8 @@ const FlowCanvas: React.FC = () => {
     isVisible,
     selectedNodeId, setSelectedNodeId, setSelectedNode,
     storyData, currentSceneIndex, getOrphanNodes,
-    calculateLayout
+    calculateLayout,
+    screenToFlowPosition
   } = useStoryEditorContext();
 
   // 节点高亮处理
@@ -112,9 +113,10 @@ const FlowCanvas: React.FC = () => {
     const type = event.dataTransfer.getData('application/node-type');
     if (!type || !nodeNameToType[type]) return;
     // 画布坐标转换
-    const reactFlowBounds = (event.target as HTMLDivElement).getBoundingClientRect();
-    const x = event.clientX - reactFlowBounds.left;
-    const y = event.clientY - reactFlowBounds.top;
+    const position = screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
+    }); 
     const id = `${type}_${Date.now()}`;
     const defaultData: any = {
       nodeType: type,
@@ -129,7 +131,7 @@ const FlowCanvas: React.FC = () => {
       {
         id,
         type: nodeNameToType[type],
-        position: { x, y },
+        position,
         data: defaultData
       }
     ]);
