@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactFlow, Background, Controls, Panel } from '@xyflow/react';
 import { Button, Space, message } from 'antd';
 import { nodeNameToType, nodeTypes } from '../../../types/define';
@@ -8,15 +8,16 @@ import NodeTypeToolbar from './NodeTypeToolbar';
 const FlowCanvas: React.FC = () => {
   const {
     nodes, setNodes,
-    edges, setEdges,
+    edges,
     onNodesChange, onEdgesChange,
-    onConnect, onNodeClick,
+    onConnect,
     isVisible,
     selectedNodeId, setSelectedNodeId, setSelectedNode,
     storyData, currentSceneIndex, getOrphanNodes,
     calculateLayout,
     screenToFlowPosition
   } = useStoryEditorContext();
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
 
   // 节点高亮处理
   const getNodeWithHighlight = (node: any) => ({
@@ -27,10 +28,36 @@ const FlowCanvas: React.FC = () => {
     }
   });
 
+  // 边高亮处理
+  const getEdgeWithHighlight = (edge: any) => ({
+    ...edge,
+    style: {
+      ...(edge.style || {}),
+      stroke: edge.id === selectedEdgeId ? '#faad14' : (edge.style?.stroke || '#b1b1b7'),
+      strokeWidth: edge.id === selectedEdgeId ? 3 : (edge.style?.strokeWidth || 2),
+    },
+    animated: edge.id === selectedEdgeId
+  });
+
   // 画布空白点击
   const handlePaneClick = () => {
     setSelectedNode(null);
     setSelectedNodeId(null);
+    setSelectedEdgeId(null);
+  };
+
+  // 边点击
+  const handleEdgeClick = (_: any, edge: any) => {
+    setSelectedEdgeId(edge.id);
+    setSelectedNodeId(null);
+    setSelectedNode(null);
+  };
+
+  // 节点点击
+  const handleNodeClick = (event: any, node: any) => {
+    setSelectedNodeId(node.id);
+    setSelectedNode(node);
+    setSelectedEdgeId(null);
   };
 
   // 导出当前场景
@@ -143,11 +170,12 @@ const FlowCanvas: React.FC = () => {
       <div style={{ opacity: isVisible ? 1 : 0, width: '100%', height: '100vh', overflow: 'auto' }}>
         <ReactFlow
           nodes={nodes.map(getNodeWithHighlight)}
-          edges={edges}
+          edges={edges.map(getEdgeWithHighlight)}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onNodeClick={onNodeClick}
+          onNodeClick={handleNodeClick}
+          onEdgeClick={handleEdgeClick}
           nodeTypes={nodeTypes}
           style={{ width: '100%', height: '100vh' }}
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
