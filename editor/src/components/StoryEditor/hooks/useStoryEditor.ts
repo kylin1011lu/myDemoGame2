@@ -73,14 +73,54 @@ export function useStoryEditor() {
   }, []);
 
   // 连接节点
-  const onConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect = useCallback((params: Connection) => {
+    setEdges((eds) => addEdge(params, eds));
+    // 设置source节点的next_node_id
+    setNodes((nds) => nds.map(n =>
+      n.id === params.source ? {
+        ...n,
+        data: {
+          ...n.data,
+          nextNodeId: params.target
+        }
+      } : n
+    ));
+  }, []);
 
   // 节点/边变化
   const onNodesChange: OnNodesChange = useCallback((changes) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
   }, []);
   const onEdgesChange: OnEdgesChange = useCallback((changes) => {
-    setEdges((eds) => applyEdgeChanges(changes, eds));
+    setEdges((eds) => {
+      let newEdges = applyEdgeChanges(changes, eds);
+      // 检查是否有边被删除
+      const removed = changes.filter(c => c.type === 'remove');
+      if (removed.length > 0) {
+        setNodes((nds) => {
+          let updated = [...nds];
+          removed.forEach(rm => {
+            if (rm.id) {
+              // 找到被删除的边
+              const oldEdge = eds.find(e => e.id === rm.id);
+              if (oldEdge) {
+                updated = updated.map(n =>
+                  n.id === oldEdge.source ? {
+                    ...n,
+                    data: {
+                      ...n.data,
+                      nextNodeId: null
+                    }
+                  } : n
+                );
+              }
+            }
+          });
+          return updated;
+        });
+      }
+      return newEdges;
+    });
   }, []);
 
   // 选中节点

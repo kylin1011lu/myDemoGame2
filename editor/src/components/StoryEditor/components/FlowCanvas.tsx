@@ -77,7 +77,7 @@ const FlowCanvas: React.FC = () => {
         parameters: d.parameters,
         feedback_message_to_player: d.feedback_message_to_player,
         effects: d.effects,
-        next_node_id: d.nextNodeId || d.next_node_id || null
+        next_node_id: d.nextNodeId || null
       });
       return node;
     });

@@ -27,7 +27,7 @@ const SystemPlayerDialogueEditor: React.FC<SystemPlayerDialogueEditorProps> = ({
         ...node.data,
         nodeType: all.node_type,
         content: all.content.split('\n'),
-        next_node_id: all.next_node_id
+        nextNodeId: all.next_node_id
       }
     };
     onChange(newNode);

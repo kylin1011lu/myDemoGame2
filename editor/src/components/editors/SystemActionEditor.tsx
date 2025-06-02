@@ -15,7 +15,7 @@ const SystemActionEditor: React.FC<SystemActionEditorProps> = ({ node, onChange 
       node_id: node.id,
       node_type: node.data.nodeType,
       content: (node.data.content as string[] || []).join('\n'),
-      next_node_id: node.data.next_node_id || ''
+      next_node_id: node.data.nextNodeId || ''
     });
   }, [node, form]);
 
@@ -27,7 +27,7 @@ const SystemActionEditor: React.FC<SystemActionEditorProps> = ({ node, onChange 
         ...node.data,
         nodeType: all.node_type,
         content: all.content.split('\n'),
-        next_node_id: all.next_node_id
+        nextNodeId: all.next_node_id
       }
     };
     onChange(newNode);
