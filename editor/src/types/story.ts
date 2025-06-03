@@ -23,13 +23,14 @@ export interface IStoryData {
   story_id: string;
   story_title: string;
   description: string;
-  start_node_id: string;
+  start_scene_id: string;
   scenes: ISceneData[];
 }
 
 export interface ISceneData {
   scene_id: string;
   scene_title: string;
+  start_node_id: string;
   nodes: INodeData[];
 }
 

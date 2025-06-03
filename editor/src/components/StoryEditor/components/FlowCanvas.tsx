@@ -64,7 +64,7 @@ const FlowCanvas: React.FC = () => {
   const exportCurrentScene = () => {
     if (!storyData) return;
     const scene = storyData.scenes[currentSceneIndex];
-    const orphanNodes = getOrphanNodes(storyData.start_node_id);
+    const orphanNodes = getOrphanNodes(scene.start_node_id);
     if (orphanNodes.length > 0) {
       message.error(`存在${orphanNodes.length}个孤立节点，无法导出！`);
       return;
