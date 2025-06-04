@@ -101,7 +101,6 @@ const FlowCanvas: React.FC = () => {
         prompt: d.prompt,
         choices,
         action_type: d.action_type,
-        parameters: d.parameters,
         feedback_message_to_player: d.feedback_message_to_player,
         effects: d.effects,
         next_node_id: d.nextNodeId || null
@@ -111,6 +110,7 @@ const FlowCanvas: React.FC = () => {
     const exportScene = {
       scene_id: scene.scene_id,
       scene_title: scene.scene_title,
+      start_node_id: scene.start_node_id,
       nodes: exportNodes
     };
     const exportStory = {

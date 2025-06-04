@@ -42,7 +42,6 @@ export interface INodeData {
   prompt?: string;
   choices?: IChoiceData[];
   action_type?: string;
-  parameters?: any;
   feedback_message_to_player?: string;
   next_node_id: string | null;
   effects?: IEffectData[];

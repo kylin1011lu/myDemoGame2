@@ -6,6 +6,7 @@ import SystemPlayerDialogueNode from "../components/nodes/SystemPlayerDialogueNo
 import StoryEndFlagNode from "../components/nodes/StoryEndFlagNode";
 import HostDialogueNode from "../components/nodes/HostDialogueNode";
 import ChoiceNode from "../components/nodes/ChoiceNode";
+import { IChoiceData } from "./story";
 
 export const nodeTypes: NodeTypes = {
     playerChoiceNode: PlayerChoiceNode,
@@ -28,15 +29,16 @@ export const nodeNameToType: Record<string, string> = {
 }
 
 export interface MyNodeData {
-    [key: string]: string | string[] | null;
+    [key: string]: string | string[] | null | number | IChoiceData[];
     preIds: string[];
-    level: string; //实际设置的是number
+    level: number;
     label: string;
     nodeType: string;
     content: string[];
     emotion: string;
     characterId: string;
-    choices: string[];
+    choices: IChoiceData[];
+    nextNodeId: string;
     prompt: string;
     createdType: string; // 创建类型，用于区分是导入还是新建 导入为import，新建为create
 }

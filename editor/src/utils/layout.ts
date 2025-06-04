@@ -8,6 +8,102 @@ interface Position {
   y: number
 }
 
+/**
+ * 计算节点层级
+ * @param startNodeId 开始节点id
+ * @param nodes 节点列表
+ */
+export const caculateLevel = (startNodeId: string, nodes: MyNode[]) => {
+  if (!startNodeId) {
+    return
+  }
+
+  // 记录每个节点的前驱节点id（用于连线）
+  const prevMap = new Map<string, string[]>();
+  nodes.forEach((n) => {
+    if (n.data.nextNodeId) {
+      if (!prevMap.has(n.data.nextNodeId)) prevMap.set(n.data.nextNodeId, [])
+      prevMap.get(n.data.nextNodeId)!.push(n.id)
+    }
+    if (n.data.nodeType === 'PLAYER_CHOICE' && n.data.choices) {
+      n.data.choices.forEach((choice) => {
+        if (choice.next_node_id) {
+          if (!prevMap.has(choice.next_node_id)) prevMap.set(choice.next_node_id, [])
+          prevMap.get(choice.next_node_id)!.push(choice.choice_id)
+        }
+      })
+    }
+  })
+
+  let traversedNodeIds: string[] = []
+  let nodeIdMap = new Map<string, MyNode>()
+  nodes.forEach((node) => nodeIdMap.set(node.id, node))
+
+  let initialNodes: MyNode[] = []
+
+  // 使用递归的方式遍历节点
+  const traverseNode = (nodeId: string, level: number) => {
+
+    if (traversedNodeIds.includes(nodeId)) {
+
+      // 已经遍历过，判定是否需要更新level
+      const uiNode = initialNodes.find((n) => n.id === nodeId)
+
+      // 如果节点是PLAYER_CHOICE，则不更新level
+      if (uiNode && uiNode.data.nodeType == 'PLAYER_CHOICE') {
+        return
+      }
+
+      if (uiNode && (uiNode.data.level as number) < level) {
+        uiNode.data.level = level
+      }
+
+      const node = nodeIdMap.get(nodeId)
+      if (node) {
+        if (node.data.nextNodeId && nodeIdMap.has(node.data.nextNodeId)) {
+          traverseNode(node.data.nextNodeId, level + 1)
+        }
+
+        if (node.data.nodeType === 'PLAYER_CHOICE' && node.data.choices && node.data.choices.length > 0) {
+          node.data.choices.forEach((choice) => {
+            if (choice.next_node_id && nodeIdMap.has(choice.next_node_id)) {
+              traverseNode(choice.next_node_id, level + 1)
+            }
+          })
+        }
+      }
+      return
+    }
+    traversedNodeIds.push(nodeId)
+
+    const node = nodeIdMap.get(nodeId)
+    if (node) {
+      node.data.level = level;
+      node.data.preIds = prevMap.get(node.id) || [];
+      initialNodes.push(node)
+      if (node.data.nextNodeId && nodeIdMap.has(node.data.nextNodeId)) {
+        traverseNode(node.data.nextNodeId, level + 1)
+      }
+
+      if (node.data.nodeType === 'PLAYER_CHOICE' && node.data.choices && node.data.choices.length > 0) {
+        node.data.choices.forEach((choice) => {
+          const choiceNode = nodeIdMap.get(choice.choice_id);
+          if (choiceNode) {
+            choiceNode.data.level = level;
+            choiceNode.data.preIds = prevMap.get(choice.choice_id) || [];
+            initialNodes.push(choiceNode)
+            if (choice.next_node_id && nodeIdMap.has(choice.next_node_id)) {
+              traverseNode(choice.next_node_id, level + 1)
+            }
+          }
+        })
+      }
+    }
+  }
+
+  traverseNode(startNodeId, 0);
+}
+
 export const caculateChoicePositions = (nodes: Node[]): { choicePostions: Record<string, Position>, parentWidths: Record<string, number> } => {
   // 通过计算choiceNode所有子节点的宽度，来计算父节点的宽度
   let nodesHasChild: { [key: string]: Node[] } = {};
@@ -176,6 +272,8 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
         currentY += maxHeight + VERTICAL_SPACING;
       } else {
 
+        console.log('levelNodes[i]', levelNodes[i])
+
         let preNodeId = levelNodes[i][0].data.preIds[0]
         let preNode = nodes.find((node) => node.id === preNodeId)
 
@@ -203,5 +301,6 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
     }
   }
 
+  // console.log(nodePostions)
   return nodePostions;
 }

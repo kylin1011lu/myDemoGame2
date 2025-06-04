@@ -122,7 +122,8 @@ const ChoiceEditor: React.FC<ChoiceEditorProps> = ({ node, onChange }) => {
                 node_id: node.id,
                 node_type: node.data.nodeType,
                 text: node.data.text || '',
-                choice_id: node.data.choice_id || ''
+                choice_id: node.data.choiceId || '',
+                next_node_id: node.data.nextNodeId || ''
             });
         } catch (error) {
             console.error('处理节点数据时出错:', error);
@@ -180,6 +181,9 @@ const ChoiceEditor: React.FC<ChoiceEditorProps> = ({ node, onChange }) => {
                 effects={effectsList}
                 onChange={handleEffectsChange}
             />
+            <Form.Item label="下一个节点ID" name="next_node_id">
+                <Input disabled />
+            </Form.Item>
         </Form>
     );
 };

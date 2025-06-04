@@ -2,8 +2,9 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, applyNodeChanges, applyEdgeChanges, useNodesInitialized, useReactFlow } from '@xyflow/react';
 import { IStoryData } from '../../../types/story';
 import { parseScene } from '../../../types/parser';
-import { caculateNodePositions } from '../../../utils/layout';
+import { caculateLevel, caculateNodePositions } from '../../../utils/layout';
 import { checkOrphanNodes } from '../../../utils/storyExport';
+import { MyNode } from '../../../types/define';
 
 export function useStoryEditor() {
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -15,7 +16,7 @@ export function useStoryEditor() {
   const [isVisible, setIsVisible] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nodesInitialized = useNodesInitialized();
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, setViewport } = useReactFlow();
 
   // 默认展示
   useEffect(() => {
@@ -25,12 +26,13 @@ export function useStoryEditor() {
   // 计算节点布局
   const calculateLayout = useCallback(() => {
     if (nodes.length === 0) return;
+    caculateLevel(storyData?.scenes[currentSceneIndex].start_node_id || '', nodes as MyNode[]);
     const nodePostions = caculateNodePositions(nodes);
     setNodes(nodes.map((node) => ({
       ...node,
       position: nodePostions[node.id] || node.position
     })));
-  }, [nodes]);
+  }, [nodes, storyData, currentSceneIndex]);
 
   useEffect(() => {
     if (nodesInitialized) {
@@ -46,6 +48,11 @@ export function useStoryEditor() {
     if (!storyData) return;
     setCurrentSceneIndex(index);
     setIsVisible(false);
+    setViewport({
+      x: 0,
+      y: 0,
+      zoom: 1
+    })
     const { initialNodes, initialEdges } = parseScene(storyData.scenes[index]);
     setNodes(initialNodes);
     setEdges(initialEdges);
@@ -75,6 +82,21 @@ export function useStoryEditor() {
   // 连接节点
   const onConnect = useCallback((params: Connection) => {
     setEdges((eds) => addEdge(params, eds));
+
+    let sourceNode = nodes.find(n => n.id === params.source);
+    if (sourceNode) {
+      // 如果是CHOICE节点，则更新其父节点的choices数据
+      if (sourceNode.data.nodeType == 'CHOICE') {
+        let parentNode = nodes.find(n => n.id === sourceNode.parentId); 
+        if (parentNode) {
+          let choiceData = (parentNode as MyNode).data.choices.find(c => c.choice_id === sourceNode.id);
+          if (choiceData) {
+            choiceData.next_node_id = params.target;
+          }
+        }
+      }
+    }
+
     // 设置source节点的next_node_id
     setNodes((nds) => nds.map(n =>
       n.id === params.source ? {
@@ -85,7 +107,7 @@ export function useStoryEditor() {
         }
       } : n
     ));
-  }, []);
+  }, [nodes]);
 
   // 节点/边变化
   const onNodesChange: OnNodesChange = useCallback((changes) => {

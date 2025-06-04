@@ -7,6 +7,7 @@ import SystemPlayerDialogueEditor from '../../editors/SystemPlayerDialogueEditor
 import StoryEndFlagEditor from '../../editors/StoryEndFlagEditor';
 import ChoiceEditor from '../../editors/ChoiceEditor';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
+import { MyNode } from '../../../types/define';
 
 const NodeEditorPanel: React.FC = () => {
   const {
@@ -59,6 +60,17 @@ const NodeEditorPanel: React.FC = () => {
       });
       return;
     }
+    // 如果是CHOICE节点，则更新其父节点的choices数据
+    if (selectedNode?.data.nodeType === 'CHOICE') {
+      let parentNode = nodes.find(n => n.id === selectedNode.parentId);
+      if (parentNode) {
+        let choiceData = (parentNode as MyNode).data.choices.find(c => c.choice_id === selectedNode.id);
+        if (choiceData) {
+          choiceData.text = newNode.data.text;
+        }
+      }
+    }
+
     setNodes((nds) =>
       nds.map((n) => (n.id === selectedNode.id ? { ...n, ...newNode } : n))
     );
