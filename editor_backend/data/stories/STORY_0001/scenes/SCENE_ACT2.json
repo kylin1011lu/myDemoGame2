@@ -1,0 +1,607 @@
+{
+  "scene_id": "SCENE_ACT2",
+  "start_node_id": "NODE_ACT2_001",
+  "scene_title": "第二幕：苏醒后的探寻",
+  "nodes": [
+    {
+      "node_id": "NODE_ACT2_001",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "{player_appellation}...？",
+        "{player_appellation}...你还在吗？"
+      ],
+      "next_node_id": "NODE_ACT2_002"
+    },
+    {
+      "node_id": "NODE_ACT2_002",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "{player_appellation}...走了吗？",
+        "是不是兕子睡着了，{player_appellation}就回天上去了..."
+      ],
+      "next_node_id": "NODE_ACT2_003"
+    },
+    {
+      "node_id": "NODE_ACT2_003",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你决定如何回应她的呼唤？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_003_A",
+          "text": "[温柔回应] “我还在，兕子。你感觉怎么样了？”",
+          "next_node_id": "NODE_ACT2_004_A"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_003_B",
+          "text": "[俏皮互动] “是谁在叫{player_appellation}呀？”",
+          "next_node_id": "NODE_ACT2_004_B"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_003_C",
+          "text": "[等待观察] （暂时不回应，看她接下来会做什么）",
+          "next_node_id": "NODE_ACT2_004_C_OBSERVE"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_004_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "我还在，兕子。你感觉怎么样了？"
+      ],
+      "next_node_id": "NODE_ACT2_005"
+    },
+    {
+      "node_id": "NODE_ACT2_004_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "是谁在叫{player_appellation}呀？"
+      ],
+      "next_node_id": "NODE_ACT2_005"
+    },
+    {
+      "node_id": "NODE_ACT2_004_C_OBSERVE",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "{player_appellation}真的走了...兕子一个人了..."
+      ],
+      "next_node_id": "NODE_ACT2_003"
+    },
+    {
+      "node_id": "NODE_ACT2_005",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "{player_appellation}！你真的还在呀！",
+        "我...我感觉好多了！头不疼了，身上也很有力气！",
+        "{player_appellation}，你真的是神仙对不对？像阿娘故事里说的那种，会帮助乖孩子的神仙！"
+      ],
+      "next_node_id": "NODE_ACT2_006"
+    },
+    {
+      "node_id": "NODE_ACT2_006",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你选择如何解释自己的身份？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_006_A",
+          "text": "[默认神仙说] “嗯，你可以这么认为，我会保护兕子的。”",
+          "next_node_id": "NODE_ACT2_007_A",
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "system_identity",
+              "value": "神仙"
+            }
+          ]
+        },
+        {
+          "choice_id": "CHOICE_ACT2_006_B",
+          "text": "[强调朋友关系] “我不是神仙，兕子。我是你的特殊朋友，{player_appellation}。”",
+          "next_node_id": "NODE_ACT2_007_B",
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "system_identity",
+              "value": "特殊朋友"
+            }
+          ]
+        },
+        {
+          "choice_id": "CHOICE_ACT2_006_C",
+          "text": "[模糊处理] “我是来帮助你的人，兕子。你感觉好些了我就放心了。”",
+          "next_node_id": "NODE_ACT2_007_C",
+          "effects": [
+            {
+              "type": "SET_VARIABLE",
+              "variable_name": "system_identity",
+              "value": "帮助者"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_007_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "嗯，你可以这么认为，我会保护兕子的。"
+      ],
+      "next_node_id": "NODE_ACT2_008"
+    },
+    {
+      "node_id": "NODE_ACT2_007_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "我不是神仙，兕子。我是你的特殊朋友，{player_appellation}。"
+      ],
+      "next_node_id": "NODE_ACT2_008"
+    },
+    {
+      "node_id": "NODE_ACT2_007_C",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "我是来帮助你的人，兕子。你感觉好些了我就放心了。"
+      ],
+      "next_node_id": "NODE_ACT2_008"
+    },
+    {
+      "node_id": "NODE_ACT2_008",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "{system_identity}...\n那...{player_appellation}你住在哪里呀？是在天上的宫殿里吗？还是在很高很高的山上面？\n我能去找你玩吗？"
+      ],
+      "next_node_id": "NODE_ACT2_009"
+    },
+    {
+      "node_id": "NODE_ACT2_009",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你如何回应她的疑问？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_009_A",
+          "text": "[解释距离] “我住在一个离这里很远很远的地方，兕子暂时还不能过来。”",
+          "next_node_id": "NODE_ACT2_010_A"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_009_B",
+          "text": "[强调陪伴] “虽然你看不到我，但我可以一直像这样和你说话，陪着你。”",
+          "next_node_id": "NODE_ACT2_010_B"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_009_C",
+          "text": "[转移话题] “兕子现在肚子饿不饿呀？想不想吃点什么好吃的？”",
+          "next_node_id": "NODE_ACT2_010_C"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_010_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "我住在一个离这里很远很远的地方，兕子暂时还不能过来。"
+      ],
+      "next_node_id": "NODE_ACT2_011_ASK_FOOD"
+    },
+    {
+      "node_id": "NODE_ACT2_010_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "虽然你看不到我，但我可以一直像这样和你说话，陪着你。"
+      ],
+      "next_node_id": "NODE_ACT2_011_ASK_FOOD"
+    },
+    {
+      "node_id": "NODE_ACT2_010_C",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "兕子现在肚子饿不饿呀？想不想吃点什么好吃的？"
+      ],
+      "next_node_id": "NODE_ACT2_011_FOOD_RESPONSE"
+    },
+    {
+      "node_id": "NODE_ACT2_011_ASK_FOOD",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "哦...那好吧...",
+        "那...{player_appellation}，你是不是又有像昨天晚上那样，能让兕子不难受，还会变出好吃的本事呀？",
+        "我想吃...甜甜的...嗯...像上次阿娘给我吃过的那种，外面有层亮晶晶糖衣的果子，好好吃！"
+      ],
+      "next_node_id": "NODE_ACT2_012"
+    },
+    {
+      "node_id": "NODE_ACT2_011_FOOD_RESPONSE",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "饿！兕子肚子咕咕叫了！",
+        "{player_appellation}，你是不是又有像昨天晚上那样，能让兕子不难受，还会变出好吃的本事呀？",
+        "我想吃...甜甜的...嗯...像上次阿娘给我吃过的那种，外面有层亮晶晶糖衣的果子，好好吃！"
+      ],
+      "next_node_id": "NODE_ACT2_012"
+    },
+    {
+      "node_id": "NODE_ACT2_012",
+      "node_type": "SYSTEM_MESSAGE",
+      "content": [
+        "系统提示：宿主表达了对特定食物的渴望（甜点/糖果类）。"
+      ],
+      "next_node_id": "NODE_ACT2_013"
+    },
+    {
+      "node_id": "NODE_ACT2_013",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你决定如何满足她的愿望？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_013_A",
+          "text": "[虚拟投喂-糖果] “{player_appellation}这里正好有一种很特别的糖果，你想尝尝吗？”",
+          "next_node_id": "NODE_ACT2_014_A",
+          "effects": [
+            {
+              "type": "CHANGE_ENERGY",
+              "value": -10
+            }
+          ]
+        },
+        {
+          "choice_id": "CHOICE_ACT2_013_B",
+          "text": "[引导现实获取] “兕子可以叫青岚姐姐，看看今天早上尚食局有没有准备你喜欢的糕点呀？”",
+          "next_node_id": "NODE_ACT2_014_B"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_013_C",
+          "text": "[承诺下次] “那种糖果{player_appellation}这次没有带哦，下次一定给你带来好不好？”",
+          "next_node_id": "NODE_ACT2_014_C"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_014_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "{player_appellation}这里正好有一种很特别的糖果，你想尝尝吗？你仔细看看你的枕头边上，是不是有什么小惊喜？"
+      ],
+      "next_node_id": "NODE_ACT2_015"
+    },
+    {
+      "node_id": "NODE_ACT2_014_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "兕子可以叫青岚姐姐，看看今天早上尚食局有没有准备你喜欢的糕点呀？"
+      ],
+      "next_node_id": "NODE_ACT2_017_CALL_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_014_C",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "那种糖果{player_appellation}这次没有带哦，下次一定给你带来好不好？"
+      ],
+      "next_node_id": "NODE_ACT2_017_PROMISE_NEXT_TIME"
+    },
+    {
+      "node_id": "NODE_ACT2_015",
+      "node_type": "SYSTEM_ACTION",
+      "action_type": "PLACE_VIRTUAL_ITEM",
+      "parameters": {
+        "item_id": "CANDY_001",
+        "location_hint": "枕头边"
+      },
+      "feedback_message_to_player": "系统具象化糖果概念...",
+      "next_node_id": "NODE_ACT2_016"
+    },
+    {
+      "node_id": "NODE_ACT2_016",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "枕头边上？",
+        "哇！找到了！{player_appellation}！这里真的有一颗亮晶晶的糖糖！",
+        "好漂亮！闻起来也好香！{player_appellation}，这是你给我的吗？"
+      ],
+      "next_node_id": "NODE_ACT2_017"
+    },
+    {
+      "node_id": "NODE_ACT2_017_PROMISE_NEXT_TIME",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "哦...那好吧...那{player_appellation}下次一定要带给兕子哦！我们拉钩！"
+      ],
+      "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_017",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你如何回应？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_017_A",
+          "text": "“是呀，这是给乖兕子的小奖励，快尝尝看喜不喜欢。”",
+          "next_node_id": "NODE_ACT2_018_A"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_017_B",
+          "text": "“可能是昨晚偷偷溜进来的小精灵送给你的哦。”",
+          "next_node_id": "NODE_ACT2_018_B"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_017_C",
+          "text": "“这是你心诚则灵，自己变出来的呢！”",
+          "next_node_id": "NODE_ACT2_018_C"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_018_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "是呀，这是给乖兕子的小奖励，快尝尝看喜不喜欢。"
+      ],
+      "next_node_id": "NODE_ACT2_019"
+    },
+    {
+      "node_id": "NODE_ACT2_018_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "可能是昨晚偷偷溜进来的小精灵送给你的哦。"
+      ],
+      "next_node_id": "NODE_ACT2_019"
+    },
+    {
+      "node_id": "NODE_ACT2_018_C",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "这是你心诚则灵，自己变出来的呢！"
+      ],
+      "next_node_id": "NODE_ACT2_019"
+    },
+    {
+      "node_id": "NODE_ACT2_019",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "唔~~好甜！好好吃！",
+        "谢谢{player_appellation}！{player_appellation}你真好！",
+        "{player_appellation}，你是不是什么都能变出来呀？那你能不能帮我把天上的月亮摘下来？"
+      ],
+      "next_node_id": "NODE_ACT2_020"
+    },
+    {
+      "node_id": "NODE_ACT2_020",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "面对小公主天马行空的要求，你如何回应？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_020_A",
+          "text": "[耐心解释] “月亮太高太大了，{player_appellation}也摘不下来呢。不过，我可以给你讲月亮的故事。”",
+          "next_node_id": "NODE_ACT2_021_A"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_020_B",
+          "text": "[巧妙引导] “摘月亮有点难哦，不过{player_appellation}可以给你变出像月亮一样圆圆亮亮的好吃的，想不想要？”",
+          "next_node_id": "NODE_ACT2_021_B"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_020_C",
+          "text": "[幽默回应] “噓，月亮是大家的，摘下来别人就看不到了。我们换个别的，好不好？”",
+          "next_node_id": "NODE_ACT2_021_C"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_021_A",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "月亮太高太大了，{player_appellation}也摘不下来呢。不过，我可以给你讲月亮的故事。"
+      ],
+      "next_node_id": "NODE_ACT2_022_STORY_MOON"
+    },
+    {
+      "node_id": "NODE_ACT2_021_B",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "摘月亮有点难哦，不过{player_appellation}可以给你变出像月亮一样圆圆亮亮的好吃的，想不想要？"
+      ],
+      "next_node_id": "NODE_ACT2_022_ASK_FOR_MOON_FOOD"
+    },
+    {
+      "node_id": "NODE_ACT2_021_C",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "噓，月亮是大家的，摘下来别人就看不到了。我们换个别的，好不好？"
+      ],
+      "next_node_id": "NODE_ACT2_022_CHANGE_REQUEST"
+    },
+    {
+      "node_id": "NODE_ACT2_022_ASK_FOR_MOON_FOOD",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "想想想！圆圆亮亮的好吃的！是不是像天上的星星糖一样？",
+        "{player_appellation}快给我变！兕子现在就要！"
+      ],
+      "next_node_id": "NODE_ACT2_023"
+    },
+    {
+      "node_id": "NODE_ACT2_023",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你决定：",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_023_A",
+          "text": "[满足她-虚拟饼干] “好，你看看窗台上，是不是有块圆圆的香香的小饼干？”",
+          "next_node_id": "NODE_ACT2_024_A_COOKIE",
+          "effects": [
+            {
+              "type": "CHANGE_ENERGY",
+              "value": -5
+            }
+          ]
+        },
+        {
+          "choice_id": "CHOICE_ACT2_023_B",
+          "text": "[设定条件] “这个好吃的呀，要等兕子乖乖起床，洗漱干净了才能变出来哦.”",
+          "next_node_id": "NODE_ACT2_024_B_CONDITION"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_023_C",
+          "text": "[吊胃口] “这个呀，是{player_appellation}的秘密武器，要等到一个特殊的时刻才能给你看呢！”",
+          "next_node_id": "NODE_ACT2_024_C_SECRET"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_024_A_COOKIE",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "好，你看看窗台上，是不是有块圆圆的香香的小饼干？"
+      ],
+      "next_node_id": "NODE_ACT2_025_FIND_COOKIE"
+    },
+    {
+      "node_id": "NODE_ACT2_025_FIND_COOKIE",
+      "node_type": "SYSTEM_ACTION",
+      "action_type": "PLACE_VIRTUAL_ITEM",
+      "parameters": {
+        "item_id": "COOKIE_001",
+        "location_hint": "窗台"
+      },
+      "feedback_message_to_player": "系统具象化饼干概念...",
+      "next_node_id": "NODE_ACT2_026_HOST_FINDS_COOKIE"
+    },
+    {
+      "node_id": "NODE_ACT2_026_HOST_FINDS_COOKIE",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "哇！真的有小饼干！谢谢{player_appellation}！"
+      ],
+      "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_024_B_CONDITION",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "这个好吃的呀，要等兕子乖乖叫青岚姐姐来，帮你穿好衣服梳好头头才能变出来哦。"
+      ],
+      "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_024_C_SECRET",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "这个呀，是{player_appellation}的秘密武器，要等到一个特殊的时刻才能给你看呢！现在我们先叫青岚姐姐好不好？"
+      ],
+      "next_node_id": "NODE_ACT2_020_CALL_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_020_CALL_QINGLAN",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "能！兕子能做到！",
+        "我现在就叫青岚姐姐！",
+        "青岚姐姐！青岚姐姐！兕子醒啦！快来帮兕子穿衣服，梳头头！"
+      ],
+      "next_node_id": "NODE_ACT2_021_QINGLAN_ENTERS"
+    },
+    {
+      "node_id": "NODE_ACT2_021_QINGLAN_ENTERS",
+      "node_type": "SYSTEM_MESSAGE",
+      "content": [
+        "（青岚被惊醒，匆忙应声进来。）",
+        "青岚：“哎哟，我的小殿下，您醒啦！感觉怎么样？还难受吗？”",
+        "（青岚一边说着，一边过来摸摸兕子的额头）",
+        "青岚：“咦？好像不烧了呢！太好了太好了！老天保佑！”"
+      ],
+      "next_node_id": "NODE_ACT2_022_HOST_REPLY_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_022_HOST_REPLY_QINGLAN",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "是我的朋友{player_appellation}治好我的！他可厉害啦！"
+      ],
+      "next_node_id": "NODE_ACT2_023_QINGLAN_REACTION"
+    },
+    {
+      "node_id": "NODE_ACT2_023_QINGLAN_REACTION",
+      "node_type": "SYSTEM_MESSAGE",
+      "content": [
+        "青岚：“朋友？殿下是说梦里的神仙朋友吗？”"
+      ],
+      "next_node_id": "NODE_ACT2_024_HOST_CONFIRM_TO_QINGLAN"
+    },
+    {
+      "node_id": "NODE_ACT2_024_HOST_CONFIRM_TO_QINGLAN",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "（思考片刻）嗯！就是神仙{player_appellation}！"
+      ],
+      "next_node_id": "NODE_ACT2_025_PLAYER_CHOICE_SECRET"
+    },
+    {
+      "node_id": "NODE_ACT2_025_PLAYER_CHOICE_SECRET",
+      "node_type": "PLAYER_CHOICE",
+      "prompt": "你决定是否需要“提醒”小公主关于保密的事情？",
+      "choices": [
+        {
+          "choice_id": "CHOICE_ACT2_025_A",
+          "text": "[轻声提醒] “兕子，我们是好朋友，我们的事情是小秘密哦。”",
+          "next_node_id": "NODE_ACT2_026_A_REMIND"
+        },
+        {
+          "choice_id": "CHOICE_ACT2_025_B",
+          "text": "[静观其变] （暂不干涉，看青岚的反应和后续发展）",
+          "next_node_id": "NODE_ACT2_026_B_OBSERVE"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_026_A_REMIND",
+      "node_type": "SYSTEM_PLAYER_DIALOGUE",
+      "content": [
+        "兕子，我们是好朋友，我们的事情是小秘密哦，不能随便告诉别人的。"
+      ],
+      "next_node_id": "NODE_ACT2_027_HOST_UNDERSTANDS_SECRET"
+    },
+    {
+      "node_id": "NODE_ACT2_027_HOST_UNDERSTANDS_SECRET",
+      "node_type": "HOST_DIALOGUE",
+      "content": [
+        "（小嘴立刻抿紧，然后对着青岚神秘一笑）嘻嘻，青岚姐姐，这是兕子的小秘密，不能告诉你！"
+      ],
+      "next_node_id": "NODE_ACT2_028_QINGLAN_FINAL_REACTION"
+    },
+    {
+      "node_id": "NODE_ACT2_026_B_OBSERVE",
+      "node_type": "SYSTEM_MESSAGE",
+      "content": [
+        "（你决定暂时不干涉。）"
+      ],
+      "next_node_id": "NODE_ACT2_028_QINGLAN_FINAL_REACTION"
+    },
+    {
+      "node_id": "NODE_ACT2_028_QINGLAN_FINAL_REACTION",
+      "node_type": "SYSTEM_MESSAGE",
+      "content": [
+        "青岚：“好好好，是小殿下的秘密，奴婢不问就是了。来，我们穿好衣服，洗漱用膳了。”"
+      ],
+      "next_node_id": "NODE_ACT2_END",
+      "effects": [
+        {
+          "type": "CHANGE_TRUST",
+          "value": 10,
+          "target": "HOST_JINYANG",
+          "condition": "player_reminded_secret"
+        }
+      ]
+    },
+    {
+      "node_id": "NODE_ACT2_END",
+      "node_type": "STORY_END_FLAG",
+      "outcome": "HOST_AWAKENED_INTERACTED",
+      "unlocks": [
+        "STORY_JINYANG_ACT3"
+      ],
+      "next_node_id": null
+    }
+  ],
+  "created_at": "2025-06-06T08:50:28.536Z",
+  "updated_at": "2025-06-06T08:50:28.536Z",
+  "node_count": 53
+}
