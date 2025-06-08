@@ -5,11 +5,15 @@ import { parseScene } from '../../../types/parser';
 import { caculateLevel, caculateNodePositions } from '../../../utils/layout';
 import { checkOrphanNodes } from '../../../utils/storyExport';
 import { MyNode } from '../../../types/define';
+import { getApiClient } from '../../../utils/network';
+import { ReqGetSceneById, ResGetSceneById } from '../../../shared/protocols/PtlGetSceneById';
 
-export function useStoryEditor() {
+const client = getApiClient();
+
+export function useStoryEditor(initialStoryData?: IStoryData) {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-  const [storyData, setStoryData] = useState<IStoryData | null>(null);
+  const [storyData, setStoryData] = useState<IStoryData | null>(initialStoryData || null);
   const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
@@ -17,6 +21,15 @@ export function useStoryEditor() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nodesInitialized = useNodesInitialized();
   const { screenToFlowPosition, setViewport } = useReactFlow();
+
+  // 初始化节点和边
+  useEffect(() => {
+    if (initialStoryData) {
+      setStoryData(initialStoryData);
+      setCurrentSceneIndex(0);
+      setIsVisible(false);
+    }
+  }, [initialStoryData]);
 
   // 默认展示
   useEffect(() => {
@@ -43,21 +56,40 @@ export function useStoryEditor() {
     }
   }, [nodesInitialized])
 
-  // 切换场景
+  // 修改loadSceneById，支持传入index并只更新nodes/edges
+  const loadSceneById = useCallback(async (storyId: string, sceneId: string, index?: number) => {
+    const ret = await client.callApi('GetSceneById', { story_id: storyId, scene_id: sceneId });
+    if (ret.isSucc && (ret.res as ResGetSceneById).scene) {
+      const scene = (ret.res as ResGetSceneById).scene!;
+      setStoryData(prev => {
+        if (!prev) return null;
+        // 保持scenes为全量，替换对应index的scene
+        const newScenes = prev.scenes.map((s, i) => i === (index ?? 0) ? scene : s);
+        return { ...prev, scenes: newScenes };
+      });
+      setIsVisible(false);
+      const { initialNodes, initialEdges } = parseScene(scene);
+      setNodes(initialNodes);
+      setEdges(initialEdges);
+    }
+  }, []);
+
+  // 初始化时自动加载start_scene_id场景，并设置currentSceneIndex
+  useEffect(() => {
+    if (initialStoryData && initialStoryData.story_id && initialStoryData.start_scene_id && initialStoryData.scenes) {
+      const idx = initialStoryData.scenes.findIndex(s => s.scene_id === initialStoryData.start_scene_id);
+      setCurrentSceneIndex(idx >= 0 ? idx : 0);
+      loadSceneById(initialStoryData.story_id, initialStoryData.start_scene_id, idx >= 0 ? idx : 0);
+    }
+  }, [initialStoryData, loadSceneById]);
+
+  // 切换场景时自动请求并渲染
   const handleSceneChange = useCallback((index: number) => {
-    if (!storyData) return;
+    if (!storyData || !storyData.scenes[index]) return;
     setCurrentSceneIndex(index);
     setIsVisible(false);
-    setViewport({
-      x: 0,
-      y: 0,
-      zoom: 1
-    })
-    const { initialNodes, initialEdges } = parseScene(storyData.scenes[index]);
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-    setTimeout(() => setIsVisible(true), 500);
-  }, [storyData]);
+    loadSceneById(storyData.story_id, storyData.scenes[index].scene_id, index);
+  }, [storyData, loadSceneById]);
 
   // 文件选择并解析
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

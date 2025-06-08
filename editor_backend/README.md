@@ -28,4 +28,14 @@ Execute `npm run dev` first, then execute:
 npm run test
 ```
 
+## 数据迁移
+
+如需进行数据迁移，请先执行：
+
+```
+npm install
+```
+
+然后再进行迁移操作。
+
 ---

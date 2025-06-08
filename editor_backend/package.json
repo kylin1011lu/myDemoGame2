@@ -1,5 +1,5 @@
 {
-  "name": "front-backend",
+  "name": "editor_backend",
   "version": "0.1.0",
   "main": "index.js",
   "private": true,
@@ -10,7 +10,8 @@
     "test": "mocha test/**/*.test.ts",
     "proto": "tsrpc-cli proto",
     "sync": "tsrpc-cli sync",
-    "api": "tsrpc-cli api"
+    "api": "tsrpc-cli api",
+    "migrate": "ts-node src/utils/migrateStories.ts"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.3",
@@ -22,6 +23,8 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "tsrpc": "^3.4.17"
+    "tsrpc": "^3.4.17",
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.0.0"
   }
 }
