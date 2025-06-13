@@ -126,6 +126,16 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
             choiceData.next_node_id = params.target;
           }
         }
+
+        // target节点如果content为空，则自动赋值choiceData.content
+        let targetNode = nodes.find(n => n.id === params.target);
+        if (targetNode) {
+          if (targetNode.data.nodeType == 'SYSTEM_PLAYER_DIALOGUE') {
+            if (!targetNode.data.content || (targetNode.data.content as string[]).length == 0) {
+              targetNode.data.content = [sourceNode.data.text || ''];
+            }
+          }
+        }
       }
     }
 
@@ -195,6 +205,25 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
     return checkOrphanNodes(nodes, edges, startNodeId);
   }, [nodes, edges]);
 
+  const isValidConnection = (connection: Connection) => {
+
+    let sourceNode = nodes.find(n => n.id === connection.source);
+    if (sourceNode) {
+      // 如果是CHOICE节点，则target必须是SystemPlayerDialogue节点
+      if (sourceNode.data.nodeType == 'CHOICE') {
+        let targetNode = nodes.find(n => n.id === connection.target);
+        if (targetNode) {
+          if (targetNode.data.nodeType == 'SYSTEM_PLAYER_DIALOGUE') {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return {
     nodes, setNodes,
     edges, setEdges,
@@ -203,6 +232,7 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
     selectedNodeId, setSelectedNodeId,
     selectedNode, setSelectedNode,
     isVisible, setIsVisible,
+    isValidConnection,
     fileInputRef,
     calculateLayout,
     handleSceneChange,

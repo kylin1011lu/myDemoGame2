@@ -37,7 +37,7 @@ const SystemPlayerDialogueEditor: React.FC<SystemPlayerDialogueEditorProps> = ({
     <Form form={form} layout="vertical" onValuesChange={handleValuesChange} style={{ padding: 16 }}>
       <Form.Item label="节点ID" name="node_id"><Input /></Form.Item>
       <Form.Item label="节点类型" name="node_type"><Input disabled /></Form.Item>
-      <Form.Item label="内容（多行）" name="content"><Input.TextArea autoSize={{ minRows: 3 }} disabled /></Form.Item>
+      <Form.Item label="内容（多行）" name="content"><Input.TextArea autoSize={{ minRows: 3 }} /></Form.Item>
       <Form.Item label="下一个节点ID" name="next_node_id"><Input disabled/></Form.Item>
     </Form>
   );

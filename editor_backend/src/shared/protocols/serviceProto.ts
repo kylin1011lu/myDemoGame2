@@ -1,6 +1,8 @@
 import { ServiceProto } from 'tsrpc-proto';
 import { ReqGetSceneById, ResGetSceneById } from './PtlGetSceneById';
 import { ReqGetStoryList, ResGetStoryList } from './PtlGetStoryList';
+import { ReqUpdateScene, ResUpdateScene } from './PtlUpdateScene';
+import { ReqUpdateSceneInfo, ResUpdateSceneInfo } from './PtlUpdateSceneInfo';
 
 export interface ServiceType {
     api: {
@@ -11,6 +13,14 @@ export interface ServiceType {
         "GetStoryList": {
             req: ReqGetStoryList,
             res: ResGetStoryList
+        },
+        "UpdateScene": {
+            req: ReqUpdateScene,
+            res: ResUpdateScene
+        },
+        "UpdateSceneInfo": {
+            req: ReqUpdateSceneInfo,
+            res: ResUpdateSceneInfo
         }
     },
     msg: {
@@ -29,6 +39,16 @@ export const serviceProto: ServiceProto<ServiceType> = {
         {
             "id": 2,
             "name": "GetStoryList",
+            "type": "api"
+        },
+        {
+            "id": 4,
+            "name": "UpdateScene",
+            "type": "api"
+        },
+        {
+            "id": 5,
+            "name": "UpdateSceneInfo",
             "type": "api"
         }
     ],
@@ -233,6 +253,129 @@ export const serviceProto: ServiceProto<ServiceType> = {
                             ]
                         }
                     }
+                }
+            ]
+        },
+        "PtlUpdateScene/ReqUpdateScene": {
+            "type": "Interface",
+            "properties": [
+                {
+                    "id": 0,
+                    "name": "story_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "scene_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 2,
+                    "name": "scene_title",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 3,
+                    "name": "start_node_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 4,
+                    "name": "nodes",
+                    "type": {
+                        "type": "Array",
+                        "elementType": {
+                            "type": "Any"
+                        }
+                    }
+                }
+            ]
+        },
+        "PtlUpdateScene/ResUpdateScene": {
+            "type": "Interface",
+            "properties": [
+                {
+                    "id": 0,
+                    "name": "success",
+                    "type": {
+                        "type": "Boolean"
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "error",
+                    "type": {
+                        "type": "String"
+                    },
+                    "optional": true
+                }
+            ]
+        },
+        "PtlUpdateSceneInfo/ReqUpdateSceneInfo": {
+            "type": "Interface",
+            "properties": [
+                {
+                    "id": 0,
+                    "name": "story_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "scene_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 2,
+                    "name": "new_scene_id",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 3,
+                    "name": "scene_title",
+                    "type": {
+                        "type": "String"
+                    }
+                },
+                {
+                    "id": 4,
+                    "name": "start_node_id",
+                    "type": {
+                        "type": "String"
+                    }
+                }
+            ]
+        },
+        "PtlUpdateSceneInfo/ResUpdateSceneInfo": {
+            "type": "Interface",
+            "properties": [
+                {
+                    "id": 0,
+                    "name": "success",
+                    "type": {
+                        "type": "Boolean"
+                    }
+                },
+                {
+                    "id": 1,
+                    "name": "error",
+                    "type": {
+                        "type": "String"
+                    },
+                    "optional": true
                 }
             ]
         }

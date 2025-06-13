@@ -80,6 +80,7 @@ export function parseScene(scene: ISceneData) {
                     label: node.node_type,
                     nodeType: node.node_type,
                     content: node.content,
+                    prompt: node.prompt,
                     choices: node.choices,
                     nextNodeId: node.next_node_id,
                     createdType: 'import'
@@ -246,8 +247,8 @@ export function parseScene(scene: ISceneData) {
     //     }
     // })
 
-    console.log(initialNodes)
-    console.log(initialEdges)
+    // console.log(initialNodes)
+    // console.log(initialEdges)
 
     return {
         initialNodes,

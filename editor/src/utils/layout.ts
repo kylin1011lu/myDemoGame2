@@ -272,7 +272,7 @@ export const caculateNodePositions = (nodes: Node[]): Record<string, Position> =
         currentY += maxHeight + VERTICAL_SPACING;
       } else {
 
-        console.log('levelNodes[i]', levelNodes[i])
+        // console.log('levelNodes[i]', levelNodes[i])
 
         let preNodeId = levelNodes[i][0].data.preIds[0]
         let preNode = nodes.find((node) => node.id === preNodeId)

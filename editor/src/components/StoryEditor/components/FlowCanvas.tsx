@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { ReactFlow, Background, Controls, Panel } from '@xyflow/react';
+import { ReactFlow, Background, Controls, Panel, Connection } from '@xyflow/react';
 import { Button, Space, message } from 'antd';
 import { nodeNameToType, nodeTypes } from '../../../types/define';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
 import NodeTypeToolbar from './NodeTypeToolbar';
+import { getApiClient } from '../../../utils/network';
+import { ReqUpdateScene, ResUpdateScene } from '../../../shared/protocols/PtlUpdateScene';
 
 const FlowCanvas: React.FC = () => {
   const {
@@ -11,6 +13,7 @@ const FlowCanvas: React.FC = () => {
     edges,
     onNodesChange, onEdgesChange,
     onConnect,
+    isValidConnection,
     isVisible,
     selectedNodeId, setSelectedNodeId, setSelectedNode,
     storyData, currentSceneIndex, getOrphanNodes,
@@ -18,6 +21,7 @@ const FlowCanvas: React.FC = () => {
     screenToFlowPosition
   } = useStoryEditorContext();
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
+  const client = getApiClient();
 
   // 节点高亮处理
   const getNodeWithHighlight = (node: any) => ({
@@ -125,6 +129,60 @@ const FlowCanvas: React.FC = () => {
     });
   };
 
+  // 保存当前场景
+  const saveCurrentScene = async () => {
+    if (!storyData) return;
+    const scene = storyData.scenes[currentSceneIndex];
+    // 组装nodes为json结构
+    const removeNullFields = (obj: any) => {
+      const result: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (value !== null && value !== undefined) {
+          result[key] = value;
+        }
+      }
+      return result;
+    };
+    const exportNodes = nodes.filter(n => n.type !== 'choiceNode').map(n => {
+      const d = n.data;
+      let choices = undefined;
+      if (d.nodeType === 'PLAYER_CHOICE' && Array.isArray(d.choices)) {
+        choices = d.choices.map((c: any) => (removeNullFields({
+          choice_id: c.choice_id,
+          text: c.text,
+          next_node_id: c.next_node_id,
+          effects: c.effects
+        })));
+      }
+      let node = removeNullFields({
+        node_id: n.id,
+        node_type: d.nodeType,
+        content: d.content,
+        character_id: d.characterId || d.character_id,
+        prompt: d.prompt,
+        choices,
+        action_type: d.action_type,
+        feedback_message_to_player: d.feedback_message_to_player,
+        effects: d.effects,
+        next_node_id: d.nextNodeId || null
+      });
+      return node;
+    });
+    const req: ReqUpdateScene = {
+      story_id: storyData.story_id,
+      scene_id: scene.scene_id,
+      scene_title: scene.scene_title,
+      start_node_id: scene.start_node_id,
+      nodes: exportNodes
+    };
+    const ret = await client.callApi('UpdateScene', req);
+    if (ret.isSucc && ret.res.success) {
+      message.success('保存成功');
+    } else {
+      message.error('保存失败: ' + (ret.res.error || '未知错误'));
+    }
+  };
+
   const refresh = () => {
     calculateLayout();
   };
@@ -176,6 +234,7 @@ const FlowCanvas: React.FC = () => {
           onConnect={onConnect}
           onNodeClick={handleNodeClick}
           onEdgeClick={handleEdgeClick}
+          isValidConnection={isValidConnection as any}
           nodeTypes={nodeTypes}
           style={{ width: '100%', height: '100vh' }}
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}
@@ -188,7 +247,7 @@ const FlowCanvas: React.FC = () => {
           <Panel position="top-right">
             <Space>
               <Button onClick={refresh}>刷新</Button>
-              <Button>保存</Button>
+              <Button onClick={saveCurrentScene}>保存</Button>
               <Button onClick={exportCurrentScene}>导出</Button>
             </Space>
           </Panel>
