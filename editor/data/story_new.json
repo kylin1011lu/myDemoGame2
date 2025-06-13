@@ -1,5 +1,5 @@
 {
-  "story_id": "STORY_0001",
+  "story_id": 10000,
   "story_title": "与唐朝小公主的羁绊",
   "description": "玩家与病危的晋阳公主首次建立链接，帮助她度过危机，并在她苏醒后进行初步的互动与探索。",
   "start_node_id": "NODE_ACT1_001",

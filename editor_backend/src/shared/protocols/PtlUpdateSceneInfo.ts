@@ -1,6 +1,6 @@
 export interface ReqUpdateSceneInfo {
-  story_id: string;
-  scene_id: string; // 原scene_id
+  story_id: number;
+  scene_id: string;
   new_scene_id: string;
   scene_title: string;
   start_node_id: string;

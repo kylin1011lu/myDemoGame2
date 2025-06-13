@@ -171,8 +171,7 @@ const FlowCanvas: React.FC = () => {
     const req: ReqUpdateScene = {
       story_id: storyData.story_id,
       scene_id: scene.scene_id,
-      scene_title: scene.scene_title,
-      start_node_id: scene.start_node_id,
+      start_node_id: exportNodes[0].node_id,
       nodes: exportNodes
     };
     const ret = await client.callApi('UpdateScene', req);

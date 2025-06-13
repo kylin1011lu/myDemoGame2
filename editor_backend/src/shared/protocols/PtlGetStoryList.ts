@@ -2,7 +2,7 @@ export interface ReqGetStoryList {}
 
 export interface ResGetStoryList {
   stories: Array<{
-    story_id: string;
+    story_id: number;
     story_title: string;
     description: string;
     start_scene_id: string;

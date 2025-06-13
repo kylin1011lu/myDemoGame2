@@ -57,7 +57,7 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
   }, [nodesInitialized])
 
   // 修改loadSceneById，支持传入index并只更新nodes/edges
-  const loadSceneById = useCallback(async (storyId: string, sceneId: string, index?: number) => {
+  const loadSceneById = useCallback(async (storyId: number, sceneId: string, index?: number) => {
     const ret = await client.callApi('GetSceneById', { story_id: storyId, scene_id: sceneId });
     if (ret.isSucc && (ret.res as ResGetSceneById).scene) {
       const scene = (ret.res as ResGetSceneById).scene!;

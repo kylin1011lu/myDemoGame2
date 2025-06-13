@@ -9,17 +9,17 @@ const { Header, Content } = Layout
 const App: React.FC = () => {
   return (
     <Router>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Header style={{ background: '#fff', padding: '0 20px' }}>
-          <h1>故事编辑器</h1>
-        </Header>
-        <Content style={{ padding: '20px' }}>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header style={{ background: '#fff', padding: '0 20px' }}>
+        <h1>故事编辑器</h1>
+      </Header>
+      <Content style={{ padding: '20px' }}>
           <Routes>
             <Route path="/" element={<StoryHomePage />} />
             <Route path="/editor/:id" element={<StoryEditor />} />
           </Routes>
-        </Content>
-      </Layout>
+      </Content>
+    </Layout>
     </Router>
   )
 }

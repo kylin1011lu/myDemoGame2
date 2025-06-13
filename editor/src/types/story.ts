@@ -20,7 +20,7 @@ export const StoryEffectTypeNames = {
 
 // 基础接口定义
 export interface IStoryData {
-  story_id: string;
+  story_id: number;
   story_title: string;
   description: string;
   start_scene_id: string;
@@ -61,3 +61,10 @@ export interface IEffectData {
   target?: string;
   condition?: string;
 }
+
+export const storyTypes = [
+  { key: 'all', label: '全部' },
+  { key: 'history', label: '历史' },
+  { key: 'fantasy', label: '玄幻' },
+  { key: 'romance', label: '爱情' },
+];

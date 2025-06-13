@@ -1,11 +1,11 @@
 export interface ReqGetSceneById {
-  story_id: string;
+  story_id: number;
   scene_id: string;
 }
 
 export interface ResGetSceneById {
   scene?: {
-    story_id: string;
+    story_id: number;
     scene_id: string;
     scene_title: string;
     start_node_id: string;

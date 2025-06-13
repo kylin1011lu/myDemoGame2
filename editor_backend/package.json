@@ -11,7 +11,8 @@
     "proto": "tsrpc-cli proto",
     "sync": "tsrpc-cli sync",
     "api": "tsrpc-cli api",
-    "migrate": "ts-node src/utils/migrateStories.ts"
+    "migrate": "ts-node src/utils/migrateStories.ts",
+    "migrate:story-id": "ts-node src/utils/migrateStoryId.ts"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.3",
