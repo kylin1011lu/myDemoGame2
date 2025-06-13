@@ -67,10 +67,16 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
         const newScenes = prev.scenes.map((s, i) => i === (index ?? 0) ? scene : s);
         return { ...prev, scenes: newScenes };
       });
+
+      if (scene.nodes.length == 0) {
+        return;
+      }
+
       setIsVisible(false);
       const { initialNodes, initialEdges } = parseScene(scene);
       setNodes(initialNodes);
       setEdges(initialEdges);
+
     }
   }, []);
 
@@ -119,7 +125,7 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
     if (sourceNode) {
       // 如果是CHOICE节点，则更新其父节点的choices数据
       if (sourceNode.data.nodeType == 'CHOICE') {
-        let parentNode = nodes.find(n => n.id === sourceNode.parentId); 
+        let parentNode = nodes.find(n => n.id === sourceNode.parentId);
         if (parentNode) {
           let choiceData = (parentNode as MyNode).data.choices.find(c => c.choice_id === sourceNode.id);
           if (choiceData) {
