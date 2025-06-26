@@ -1,12 +1,16 @@
 import * as path from "path";
-import { HttpServer } from "tsrpc";
+import { ApiCall, HttpServer } from "tsrpc";
 import { serviceProto } from "./shared/protocols/serviceProto";
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Create the Server
 const server = new HttpServer(serviceProto, {
-    port: 3000,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3001,
     // Remove this to use binary mode (remove from the client too)
-    json: true
+    json: true,
+    // Disable CORS since nginx handles it
+    cors: '',
 });
 
 // Initialize before server start

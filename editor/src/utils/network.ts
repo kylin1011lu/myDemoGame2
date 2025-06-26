@@ -10,7 +10,8 @@ declare global {
 // 根据环境自动切换server地址
 const getServerUrl = () => {
   if (import.meta.env.MODE === 'development') {
-    return 'http://127.0.0.1:3000';
+    // return 'http://127.0.0.1:3001';
+    return 'https://api.youxiheai.xin'
   }
   // 生产环境可根据实际情况配置
   return window.location.origin;
