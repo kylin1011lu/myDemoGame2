@@ -5,10 +5,8 @@ import { parseScene } from '../../../types/parser';
 import { caculateLevel, caculateNodePositions } from '../../../utils/layout';
 import { checkOrphanNodes } from '../../../utils/storyExport';
 import { MyNode } from '../../../types/define';
-import { getApiClient } from '../../../utils/network';
-import { ReqGetSceneById, ResGetSceneById } from '../../../shared/protocols/PtlGetSceneById';
-
-const client = getApiClient();
+import { client  } from '../../../utils/network';
+import { ReqGetSceneById, ResGetSceneById } from '../../../shared/protocols/story/PtlGetSceneById';
 
 export function useStoryEditor(initialStoryData?: IStoryData) {
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -58,7 +56,7 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
 
   // 修改loadSceneById，支持传入index并只更新nodes/edges
   const loadSceneById = useCallback(async (storyId: number, sceneId: string, index?: number) => {
-    const ret = await client.callApi('GetSceneById', { story_id: storyId, scene_id: sceneId });
+    const ret = await client.callApi('story/GetSceneById', { story_id: storyId, scene_id: sceneId });
     if (ret.isSucc && (ret.res as ResGetSceneById).scene) {
       const scene = (ret.res as ResGetSceneById).scene!;
       setStoryData(prev => {

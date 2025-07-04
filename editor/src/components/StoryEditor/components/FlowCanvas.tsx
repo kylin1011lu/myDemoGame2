@@ -4,8 +4,8 @@ import { Button, Space, message } from 'antd';
 import { nodeNameToType, nodeTypes } from '../../../types/define';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
 import NodeTypeToolbar from './NodeTypeToolbar';
-import { getApiClient } from '../../../utils/network';
-import { ReqUpdateScene, ResUpdateScene } from '../../../shared/protocols/PtlUpdateScene';
+import { client } from '../../../utils/network';
+import { ReqUpdateScene, ResUpdateScene } from '../../../shared/protocols/story/PtlUpdateScene';
 
 const FlowCanvas: React.FC = () => {
   const {
@@ -21,8 +21,6 @@ const FlowCanvas: React.FC = () => {
     screenToFlowPosition
   } = useStoryEditorContext();
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
-  const client = getApiClient();
-
   // 节点高亮处理
   const getNodeWithHighlight = (node: any) => ({
     ...node,
@@ -174,11 +172,11 @@ const FlowCanvas: React.FC = () => {
       start_node_id: exportNodes[0].node_id,
       nodes: exportNodes
     };
-    const ret = await client.callApi('UpdateScene', req);
+    const ret = await client.callApi('story/UpdateScene', req);
     if (ret.isSucc && ret.res.success) {
       message.success('保存成功');
     } else {
-      message.error('保存失败: ' + (ret.res.error || '未知错误'));
+      message.error('保存失败: ' + (ret.res?.error || '未知错误'));
     }
   };
 

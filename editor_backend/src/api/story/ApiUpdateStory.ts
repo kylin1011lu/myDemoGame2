@@ -1,7 +1,7 @@
 import { ApiCall } from "tsrpc";
-import { ReqUpdateStory, ResUpdateStory } from "../shared/protocols/PtlUpdateStory";
-import { Story } from "../models/Story";
-import { connectDB } from "../config/database";
+import { ReqUpdateStory, ResUpdateStory } from "../../shared/protocols/story/PtlUpdateStory";
+import { Story } from "../../models/Story";
+import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqUpdateStory, ResUpdateStory>) {
   await connectDB();

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Tabs, Row, Col, Card, Spin, message, Modal, Form, Input, Select } from 'antd';
+import { Button, Tabs, Row, Col, Card, Spin, message, Modal, Form, Input, Select, Dropdown, Avatar } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { ResGetStoryList } from '../shared/protocols/PtlGetStoryList';
-import { getApiClient } from '../utils/network';
+import { ResGetStoryList } from '../shared/protocols/story/PtlGetStoryList';
+import { client } from '../utils/network';
 import { storyTypes } from '../types/story';
-import { ReqAddStory } from '../shared/protocols/PtlAddStory';
-
-const client = getApiClient();
+import { ReqAddStory } from '../shared/protocols/story/PtlAddStory';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const StoryHomePage: React.FC = () => {
   const [stories, setStories] = useState<ResGetStoryList['stories']>([]);
@@ -16,9 +15,34 @@ const StoryHomePage: React.FC = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
+  // 用户信息（简单从localStorage获取）
+  const [username] = useState(() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      return user.username || '用户';
+    } catch {
+      return '用户';
+    }
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
+
+  const userMenu = [
+    {
+      key: 'logout',
+      label: (
+        <span onClick={handleLogout}><LogoutOutlined /> 退出登录</span>
+      )
+    }
+  ];
+
   const fetchStories = async () => {
     setLoading(true);
-    const ret = await client.callApi('GetStoryList', {});
+    const ret = await client.callApi('story/GetStoryList', {});
     setLoading(false);
     if (ret.isSucc) {
       setStories(ret.res.stories);
@@ -51,18 +75,18 @@ const StoryHomePage: React.FC = () => {
       description: values.description,
       story_type: values.story_type,
     };
-    const ret = await client.callApi('AddStory', req);
+    const ret = await client.callApi('story/AddStory', req);
     if (ret.isSucc && ret.res.success) {
       message.success('新建故事成功');
       setModalOpen(false);
       fetchStories();
     } else {
-      message.error('新建失败: ' + (ret.res.error || '未知错误'));
+      message.error('新建失败: ' + (ret.res?.error || '未知错误'));
     }
   };
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', background: '#f5f5f5', minHeight: 600, padding: 24, borderRadius: 8 }}>
+    <div style={{ maxWidth: 1200, margin: '0 auto', background: '#f5f5f5', minHeight: 600, padding: 24, borderRadius: 8, position: 'relative' }}>
       {/* 按钮区 */}
       <div style={{ marginBottom: 32 }}>
         <Button type="primary" size="large" onClick={handleCreateStory}>新建故事</Button>

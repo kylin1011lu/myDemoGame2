@@ -1,10 +1,12 @@
-export interface ReqAddStory {
+import { BaseConf, BaseRequest, BaseResponse } from "../base";
+
+export interface ReqAddStory extends BaseRequest {
     story_title: string;
-    description: string;
+    description: string;    
     story_type: string;
 }
 
-export interface ResAddStory {
+export interface ResAddStory extends BaseResponse {
     success: boolean;
     error?: string;
     story?: {
@@ -23,3 +25,8 @@ export interface ResAddStory {
         updated_at: string;
     };
 } 
+
+export const conf: BaseConf = {
+    needLogin: true,
+    needRoles: ['admin']
+}

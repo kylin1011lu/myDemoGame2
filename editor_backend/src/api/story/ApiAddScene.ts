@@ -1,8 +1,8 @@
 import { ApiCall } from "tsrpc";
-import { ReqAddScene, ResAddScene } from "../shared/protocols/PtlAddScene";
-import { Scene } from "../models/Scene";
-import { Story } from "../models/Story";
-import { connectDB } from "../config/database";
+import { ReqAddScene, ResAddScene } from "../../shared/protocols/story/PtlAddScene";
+import { Scene } from "../../models/Scene";
+import { Story } from "../../models/Story";
+import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqAddScene, ResAddScene>) {
   await connectDB();

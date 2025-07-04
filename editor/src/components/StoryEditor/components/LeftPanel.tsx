@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Card, Typography, List, Button, Modal, Form, Input, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
-import { getApiClient } from '../../../utils/network';
-import { ReqUpdateSceneInfo } from '../../../shared/protocols/PtlUpdateSceneInfo';
-import { ReqAddScene } from '../../../shared/protocols/PtlAddScene';
-import { ReqUpdateStory } from '../../../shared/protocols/PtlUpdateStory';
+import { client } from '../../../utils/network';
+import { ReqUpdateSceneInfo } from '../../../shared/protocols/story/PtlUpdateSceneInfo';
+import { ReqAddScene } from '../../../shared/protocols/story/PtlAddScene';
+import { ReqUpdateStory } from '../../../shared/protocols/story/PtlUpdateStory';
 
 const { Text, Title } = Typography;
 
@@ -21,7 +21,6 @@ const LeftPanel: React.FC = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [form] = Form.useForm(); // 恢复原有form变量，专用于编辑弹窗
   const [addForm] = Form.useForm();
-  const client = getApiClient();
   const [hoverField, setHoverField] = useState<'title' | 'desc' | null>(null);
   const [editingField, setEditingField] = useState<'title' | 'desc' | null>(null);
   const [editValue, setEditValue] = useState('');
@@ -41,7 +40,7 @@ const LeftPanel: React.FC = () => {
       scene_title: values.scene_title,
       start_node_id: values.start_node_id,
     };
-    const ret = await client.callApi('UpdateSceneInfo', req);
+    const ret = await client.callApi('story/UpdateSceneInfo', req);
     if (ret.isSucc && ret.res.success) {
       message.success('保存成功');
       setEditModalOpen(false);
@@ -58,7 +57,7 @@ const LeftPanel: React.FC = () => {
         }
       }
     } else {
-      message.error('保存失败: ' + (ret.res.error || '未知错误'));
+      message.error('保存失败: ' + (ret.res?.error || '未知错误'));
     }
   };
 
@@ -70,7 +69,7 @@ const LeftPanel: React.FC = () => {
       story_id: storyData.story_id,
       scene_title: values.scene_title,
     };
-    const ret = await client.callApi('AddScene', req);
+    const ret = await client.callApi('story/AddScene', req);
     if (ret.isSucc && ret.res.success) {
       message.success('新增场景成功');
       setAddModalOpen(false);
@@ -79,7 +78,7 @@ const LeftPanel: React.FC = () => {
         storyData.scenes.push(ret.res.scene);
       }
     } else {
-      message.error('新增失败: ' + (ret.res.error || '未知错误'));
+      message.error('新增失败: ' + (ret.res?.error || '未知错误'));
     }
   };
 
@@ -97,7 +96,7 @@ const LeftPanel: React.FC = () => {
       story_id: storyData.story_id,
       ...(editingField === 'title' ? { story_title: editValue } : { description: editValue })
     };
-    const ret = await client.callApi('UpdateStory', req);
+    const ret = await client.callApi('story/UpdateStory', req);
     if (ret.isSucc && ret.res.success) {
       message.success('保存成功');
       if (editingField === 'title') storyData.story_title = editValue;
@@ -105,7 +104,7 @@ const LeftPanel: React.FC = () => {
       setEditingField(null);
       setHoverField(null);
     } else {
-      message.error('保存失败: ' + (ret.res.error || '未知错误'));
+      message.error('保存失败: ' + (ret.res?.error || '未知错误'));
     }
   };
 
@@ -126,8 +125,8 @@ const LeftPanel: React.FC = () => {
   return (
     <div style={{ flex: 'none' }}>
       <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, width: 300 }}>
-        {storyData && (
-          <>
+          {storyData && (
+            <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}
               onMouseEnter={() => setHoverField('title')}
               onMouseLeave={() => setHoverField(null)}>
@@ -199,31 +198,31 @@ const LeftPanel: React.FC = () => {
                 />
               )}
             </div>
-            <List
-              size="small"
-              bordered
-              dataSource={storyData.scenes}
-              renderItem={(scene, index) => (
-                <List.Item
-                  style={{
-                    cursor: 'pointer',
+              <List
+                size="small"
+                bordered
+                dataSource={storyData.scenes}
+                renderItem={(scene, index) => (
+                  <List.Item
+                    style={{
+                      cursor: 'pointer',
                     background: currentSceneIndex === index ? '#e6f7ff' : 'transparent',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                  }}
-                  onClick={() => handleSceneChange(index)}
-                >
-                  <Text>{scene.scene_title}</Text>
+                    }}
+                    onClick={() => handleSceneChange(index)}
+                  >
+                    <Text>{scene.scene_title}</Text>
                   <Button
                     icon={<EditOutlined />}
                     size="small"
                     style={{ marginLeft: 8 }}
                     onClick={e => { e.stopPropagation(); handleEditClick(scene); }}
                   />
-                </List.Item>
-              )}
-            />
+                  </List.Item>
+                )}
+              />
             <div style={{ marginTop: 16, textAlign: 'center' }}>
               <div
                 style={{
@@ -278,8 +277,8 @@ const LeftPanel: React.FC = () => {
                 </Form.Item>
               </Form>
             </Modal>
-          </>
-        )}
+            </>
+          )}
       </Card>
     </div>
   );

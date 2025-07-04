@@ -31,7 +31,7 @@ export interface ISceneData {
   scene_id: string;
   scene_title: string;
   start_node_id: string;
-  nodes: INodeData[];
+  nodes?: INodeData[];
 }
 
 export interface INodeData {
