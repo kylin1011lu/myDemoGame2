@@ -9,7 +9,7 @@ export function parseScene(scene: ISceneData) {
 
     // 记录每个节点的前驱节点id（用于连线）
     const prevMap = new Map<string, string[]>();
-    scene.nodes.forEach((n) => {
+    scene.nodes?.forEach((n) => {
         if (n.next_node_id) {
             if (!prevMap.has(n.next_node_id)) prevMap.set(n.next_node_id, [])
             prevMap.get(n.next_node_id)!.push(n.node_id)
@@ -26,7 +26,7 @@ export function parseScene(scene: ISceneData) {
 
     // 先构建节点id到节点的映射，方便查找上一个节点
     const nodeIdMap = new Map<string, INodeData>()
-    scene.nodes.forEach((n) => nodeIdMap.set(n.node_id, n))
+    scene.nodes?.forEach((n) => nodeIdMap.set(n.node_id, n))
 
     let traversedNodeIds: string[] = []
 

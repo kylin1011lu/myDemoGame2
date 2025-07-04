@@ -7,7 +7,7 @@ export class UserUtil {
         {
             uid: 1,
             username: process.env.ADMIN_USER || 'admin',
-            password: process.env.ADMIN_PASS || 'admin123',
+            password: process.env.ADMIN_PASS || 'ABCDEF1011admin',
             roles: ['admin']
         }
     ];

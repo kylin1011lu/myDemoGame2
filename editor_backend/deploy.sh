@@ -72,6 +72,7 @@ log_info "在服务器上安装依赖并启动服务..."
 ssh $SERVER_USER@$SERVER_IP << EOF
     cd $REMOTE_PATH
     npm install --production
+    export NODE_ENV=production
     pm2 stop $APP_NAME 2>/dev/null || true
     pm2 delete $APP_NAME 2>/dev/null || true
     pm2 start dist/index.js --name $APP_NAME
