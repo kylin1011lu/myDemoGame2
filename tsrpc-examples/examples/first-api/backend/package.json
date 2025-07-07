@@ -1,0 +1,24 @@
+{
+  "name": "first-api-backend",
+  "version": "0.1.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "proto": "tsrpc proto",
+    "sync": "tsrpc sync",
+    "api": "tsrpc api",
+    "doc": "tsrpc doc",
+    "dev": "tsrpc dev",
+    "build": "tsrpc build"
+  },
+  "devDependencies": {
+    "@types/node": "^15.14.9",
+    "onchange": "^7.1.0",
+    "ts-node": "^10.7.0",
+    "tsrpc-cli": "^2.0.8",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "tsrpc": "^3.1.8"
+  }
+}
