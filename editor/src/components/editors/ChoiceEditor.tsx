@@ -45,7 +45,7 @@ const EffectList: React.FC<{
     };
 
     return (
-        <div>
+        <div style={{ marginBottom: 16 }}>
             <div style={{ fontWeight: 500, marginBottom: 8 }}>效果列表</div>
 
             {effects.map((effect, index) => (
@@ -164,6 +164,7 @@ const ChoiceEditor: React.FC<ChoiceEditorProps> = ({ node, onChange }) => {
             layout="vertical"
             onValuesChange={handleFormValuesChange}
             style={{ padding: 16 }}
+            className="my-editor-form"
         >
             <Form.Item label="节点ID" name="node_id">
                 <Input />

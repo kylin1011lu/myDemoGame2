@@ -60,4 +60,8 @@ body {
   from {
     stroke-dashoffset: 10;
   }
+}
+
+.my-editor-form .ant-form-item {
+  margin-bottom: 8px !important;
 } 

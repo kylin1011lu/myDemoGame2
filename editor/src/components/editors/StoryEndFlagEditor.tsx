@@ -30,7 +30,7 @@ const StoryEndFlagEditor: React.FC<StoryEndFlagEditorProps> = ({ node, onChange 
   };
 
   return (
-    <Form form={form} layout="vertical" onValuesChange={handleValuesChange} style={{ padding: 16 }}>
+    <Form form={form} layout="vertical" onValuesChange={handleValuesChange} style={{ padding: 16 }} className="my-editor-form">
       <Form.Item label="节点ID" name="node_id"><Input /></Form.Item>
       <Form.Item label="节点类型" name="node_type"><Input disabled /></Form.Item>
     </Form>

@@ -39,6 +39,7 @@ const SystemMessageEditor: React.FC<SystemMessageEditorProps> = ({ node, onChang
             layout="vertical"
             onValuesChange={handleValuesChange}
             style={{ padding: 16 }}
+            className="my-editor-form"
         >
             <Form.Item label="节点ID" name="node_id">
                 <Input />

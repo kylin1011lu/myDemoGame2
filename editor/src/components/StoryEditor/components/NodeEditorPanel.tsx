@@ -112,6 +112,44 @@ const NodeEditorPanel: React.FC = () => {
   return (
     <div style={{ position: 'absolute', top: 60, right: 15, zIndex: 100, width: 340, background: '#fff', borderRadius: 10, border: '1px solid #eee', padding: 0, overflow: 'visible', minHeight: 60 }}>
       {editor}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, paddingBottom: 16, paddingRight: 16 }}>
+        <button
+          style={{ background: '#f5f5f5', border: '1px solid #ccc', borderRadius: 4, padding: '4px 16px', cursor: 'pointer' }}
+          onClick={() => {
+            // 删除节点
+            setNodes((nds) => nds.filter(n => n.id !== selectedNode.id));
+            setEdges((eds) => eds.filter(e => e.source !== selectedNode.id && e.target !== selectedNode.id));
+            setSelectedNode(null);
+            setSelectedNodeId(null);
+          }}
+        >删除</button>
+        <button
+          style={{ background: '#e6f7ff', border: '1px solid #91d5ff', borderRadius: 4, padding: '4px 16px', cursor: 'pointer' }}
+          onClick={() => {
+            // 复制节点
+            const type = selectedNode.data.nodeType;
+            const offset = 80;
+            const newId = `${type}_${Date.now()}`;
+            const newNode = {
+              ...selectedNode,
+              id: newId,
+              position: {
+                x: (selectedNode.position?.x || 0) + offset,
+                y: (selectedNode.position?.y || 0) + offset
+              },
+              data: {
+                ...selectedNode.data,
+                label: selectedNode.data.label + '_复制',
+                choice_id: selectedNode.data.choice_id ? `${selectedNode.data.choice_id}_copy` : undefined,
+                createdType: 'create',
+              }
+            };
+            setNodes((nds) => [...nds, newNode]);
+            setSelectedNode(newNode);
+            setSelectedNodeId(newId);
+          }}
+        >复制</button>
+      </div>
     </div>
   );
 };

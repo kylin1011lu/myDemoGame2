@@ -34,7 +34,7 @@ const SystemActionEditor: React.FC<SystemActionEditorProps> = ({ node, onChange 
   };
 
   return (
-    <Form form={form} layout="vertical" onValuesChange={handleValuesChange} style={{ padding: 16 }}>
+    <Form form={form} layout="vertical" onValuesChange={handleValuesChange} style={{ padding: 16 }} className="my-editor-form">
       <Form.Item label="节点ID" name="node_id"><Input /></Form.Item>
       <Form.Item label="节点类型" name="node_type"><Input disabled /></Form.Item>
       <Form.Item label="内容（多行）" name="content"><Input.TextArea autoSize={{ minRows: 3 }} /></Form.Item>

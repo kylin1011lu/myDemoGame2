@@ -92,7 +92,7 @@ const PlayerChoiceEditor: React.FC<PlayerChoiceEditorProps> = ({ node, onChange,
     };
 
     return (
-        <Form form={form} layout="vertical" onValuesChange={handleFormValuesChange} style={{ padding: 16 }}>
+        <Form form={form} layout="vertical" onValuesChange={handleFormValuesChange} style={{ padding: 16 }} className="my-editor-form">
             <Form.Item label="节点ID" name="node_id"><Input disabled /></Form.Item>
             <Form.Item label="节点类型" name="node_type"><Input disabled /></Form.Item>
             <Form.Item label="提示语" name="prompt"><Input /></Form.Item>
