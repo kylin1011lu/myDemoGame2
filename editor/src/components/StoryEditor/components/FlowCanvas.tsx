@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { ReactFlow, Background, Controls, Panel, Connection } from '@xyflow/react';
-import { Button, Space, message, Modal } from 'antd';
+import { Button, Space, message } from 'antd';
 import { nodeNameToType, nodeTypes } from '../../../types/define';
 import { useStoryEditorContext } from '../context/StoryEditorContext';
 import NodeTypeToolbar from './NodeTypeToolbar';
 import { client } from '../../../utils/network';
 import { ReqUpdateScene, ResUpdateScene } from '../../../shared/protocols/story/PtlUpdateScene';
 import { EyeOutlined } from '@ant-design/icons';
+import PreviewSimulator from './PreviewSimulator';
 
 const FlowCanvas: React.FC = () => {
   const {
@@ -23,6 +24,7 @@ const FlowCanvas: React.FC = () => {
   } = useStoryEditorContext();
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
+
   // 节点高亮处理
   const getNodeWithHighlight = (node: any) => ({
     ...node,
@@ -253,45 +255,7 @@ const FlowCanvas: React.FC = () => {
           </Panel>
         </ReactFlow>
         <NodeTypeToolbar />
-        <Modal
-          open={previewOpen}
-          onCancel={() => setPreviewOpen(false)}
-          footer={null}
-          width={400}
-          closable={false}
-          styles={{
-            body: {
-              padding: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              background: 'transparent',
-              boxShadow: 'none',
-            }
-          }}
-          style={{ top: 40, background: 'transparent', boxShadow: 'none' }}
-          title={null}
-          maskStyle={{ background: 'rgba(0,0,0,0.3)' }}
-          modalRender={modal => <div style={{ background: 'transparent', boxShadow: 'none' }}>{modal}</div>}
-        >
-          <div style={{
-            width: 375,
-            height: 667,
-            border: '12px solid #222',
-            borderRadius: 32,
-            boxShadow: '0 8px 32px #0005',
-            background: '#111',
-            overflow: 'hidden',
-            margin: '0 auto',
-            position: 'relative',
-          }}>
-            <iframe
-              src={window.location.origin + '/preview/index.html'}
-              style={{ width: '100%', height: '100%', border: 'none', background: 'transparent' }}
-              title="手机预览"
-            />
-          </div>
-        </Modal>
+        <PreviewSimulator open={previewOpen} onClose={() => setPreviewOpen(false)} />
       </div>
     </div>
   );
