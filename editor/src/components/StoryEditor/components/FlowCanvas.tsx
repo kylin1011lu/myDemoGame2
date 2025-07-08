@@ -250,7 +250,54 @@ const FlowCanvas: React.FC = () => {
               <Button onClick={refresh}>刷新</Button>
               <Button onClick={saveCurrentScene}>保存</Button>
               <Button onClick={exportCurrentScene}>导出</Button>
-              <Button icon={<EyeOutlined />} onClick={() => setPreviewOpen(true)} type="primary">预览</Button>
+              <Button icon={<EyeOutlined />} onClick={() => {
+                // 组装UpdateScene格式数据并存入localStorage
+                if (!storyData) return setPreviewOpen(true);
+                const scene = storyData.scenes[currentSceneIndex];
+                // 移除null字段的辅助函数
+                const removeNullFields = (obj: any) => {
+                  const result: any = {};
+                  for (const [key, value] of Object.entries(obj)) {
+                    if (value !== null && value !== undefined) {
+                      result[key] = value;
+                    }
+                  }
+                  return result;
+                };
+                const exportNodes = nodes.filter(n => n.type !== 'choiceNode').map(n => {
+                  const d = n.data;
+                  let choices = undefined;
+                  if (d.nodeType === 'PLAYER_CHOICE' && Array.isArray(d.choices)) {
+                    choices = d.choices.map((c: any) => (removeNullFields({
+                      choice_id: c.choice_id,
+                      text: c.text,
+                      next_node_id: c.next_node_id,
+                      effects: c.effects
+                    })));
+                  }
+                  let node = removeNullFields({
+                    node_id: n.id,
+                    node_type: d.nodeType,
+                    content: d.content,
+                    character_id: d.characterId || d.character_id,
+                    prompt: d.prompt,
+                    choices,
+                    action_type: d.action_type,
+                    feedback_message_to_player: d.feedback_message_to_player,
+                    effects: d.effects,
+                    next_node_id: d.nextNodeId || null
+                  });
+                  return node;
+                });
+                const previewScene = {
+                  story_id: storyData.story_id,
+                  scene_id: scene.scene_id,
+                  start_node_id: exportNodes[0]?.node_id,
+                  nodes: exportNodes
+                };
+                localStorage.setItem('story-preview-scene', JSON.stringify(previewScene));
+                setPreviewOpen(true);
+              }} type="primary">预览</Button>
             </Space>
           </Panel>
         </ReactFlow>

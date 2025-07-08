@@ -9,7 +9,7 @@ const { ccclass, property } = _decorator;
 @ccclass('StoryManager')
 export class StoryManager extends Component {
     private static _instance: StoryManager = null;
-    
+
     @property(JsonAsset)
     storyAsset: JsonAsset = null;
 
@@ -29,10 +29,36 @@ export class StoryManager extends Component {
     }
 
     private loadStory(): void {
-        if (this.storyAsset) {
-            this._currentStory = new Story(this.storyAsset.json as IStoryData);
+
+        // const previewScene = {
+        //     story_id: storyData.story_id,
+        //     scene_id: scene.scene_id,
+        //     start_node_id: exportNodes[0]?.node_id,
+        //     nodes: exportNodes
+        //   };
+        //   localStorage.setItem('story-preview-scene', JSON.stringify(previewScene));
+
+        const previewScene = localStorage.getItem('story-preview-scene');
+        if (previewScene) {
+            const previewSceneData = JSON.parse(previewScene);
+            this._currentStory = new Story({
+                story_id: previewSceneData.story_id,
+                story_title: previewSceneData.story_title || '',
+                description: previewSceneData.description || '',
+                start_node_id: previewSceneData.start_node_id,
+                scenes: [{
+                    scene_id: previewSceneData.scene_id,
+                    scene_title: previewSceneData.scene_title || '',
+                    nodes: previewSceneData.nodes
+                }]
+            });
             this.startStory();
         }
+
+        // if (this.storyAsset) {
+        //     this._currentStory = new Story(this.storyAsset.json as IStoryData);
+        //     this.startStory();
+        // }
     }
 
     public startStory(): void {
@@ -67,7 +93,7 @@ export class StoryManager extends Component {
         if (choice) {
             // 执行选择效果
             choice.execute();
-            
+
             // 移动到下一个节点
             const nextNode = this._currentScene.getNodeById(choice.nextNodeId);
             if (nextNode) {
