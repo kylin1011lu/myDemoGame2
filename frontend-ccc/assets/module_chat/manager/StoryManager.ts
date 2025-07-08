@@ -1,7 +1,8 @@
 
 import { _decorator, Component, JsonAsset } from 'cc';
-import { Story, StoryNode, StoryNodeType, IStoryData, StoryScene } from '../types/StoryDef';
+import { StoryNodeType, IStoryData } from '../types/StoryDef';
 import { EventDef } from '../types/EventDef';
+import { Story, StoryNode, StoryScene } from '../types/Story';
 
 const { ccclass, property } = _decorator;
 

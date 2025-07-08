@@ -1,7 +1,6 @@
 import { _decorator, Component, EventTouch, Node } from 'cc';
 import { ModuleDef } from '../../scripts/ModuleDef';
 import { SceneUtil } from '../../scripts/SceneDef';
-import { client } from '../../core_tgx/easy_http/client';
 // import { UI_DemoList } from '../ui_demo_list/UI_DemoList';
 const { ccclass, property } = _decorator;
 
@@ -31,12 +30,6 @@ export class MainMenuScene extends Component {
 
         tgx.UIWaiting.show();
         SceneUtil.loadScene({ name: info.entryScene, bundle: info.bundle });
-
-        const res = await client.callApi('AddData', {
-            content: 'test',
-        });
-
-        console.log(res.res.time);
     }
 
 }

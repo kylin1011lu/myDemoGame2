@@ -125,160 +125,160 @@ const LeftPanel: React.FC = () => {
   return (
     <div style={{ flex: 'none' }}>
       <Card style={{ position: 'absolute', top: 20, left: 20, zIndex: 10, width: 300 }}>
-          {storyData && (
-            <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}
-              onMouseEnter={() => setHoverField('title')}
-              onMouseLeave={() => setHoverField(null)}>
-              {editingField === 'title' ? (
-                <Input
-                  size="small"
-                  autoFocus
-                  value={editValue}
-                  onChange={e => setEditValue(e.target.value)}
-                  onBlur={handleStoryEditSave}
-                  onPressEnter={handleStoryEditSave}
-                  style={{ width: 160 }}
-                />
-              ) : (
-                <Title level={4} style={{ margin: 0, flex: 1, fontWeight: 500, fontSize: 18 }}>
-                  {storyData.story_title}
-                </Title>
-              )}
-              {(hoverField === 'title' && editingField !== 'title') && (
-                <Button
-                  icon={<EditOutlined />}
-                  size="small"
-                  type="text"
-                  style={{ color: '#888' }}
-                  onClick={() => { setEditingField('title'); setEditValue(storyData.story_title); }}
-                />
-              )}
-            </div>
-            <div style={{ color: '#aaa', fontSize: 13, marginBottom: 4 }}>位面序号: {storyData.story_id}</div>
-            <div style={{ position: 'relative', minHeight: 44, marginBottom: 8 }}
-              onMouseEnter={() => setHoverField('desc')}
-              onMouseLeave={() => setHoverField(null)}>
-              {editingField === 'desc' ? (
-                <Input.TextArea
-                  autoSize={{ minRows: 2, maxRows: 2 }}
-                  autoFocus
-                  value={editValue}
-                  onChange={e => setEditValue(e.target.value)}
-                  onBlur={handleStoryEditSave}
-                  onPressEnter={handleStoryEditSave}
-                  style={{ width: '100%', resize: 'none' }}
-                  maxLength={100}
-                />
-              ) : (
-                <div style={{
-                  position: 'relative',
-                  overflow: 'hidden',
-                  height: '44px',
-                  lineHeight: '22px',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  textOverflow: 'ellipsis',
-                  paddingRight: 0,
-                  wordBreak: 'break-all',
-                  fontSize: 14,
-                  color: '#888'
-                }}>
-                  {storyData.description}
-                </div>
-              )}
-              {(hoverField === 'desc' && editingField !== 'desc') && (
-                <Button
-                  icon={<EditOutlined />}
-                  size="small"
-                  type="text"
-                  style={{ color: '#888', position: 'absolute', right: -20, bottom: 0, background: 'transparent', boxShadow: 'none', zIndex: 2 }}
-                  onClick={() => { setEditingField('desc'); setEditValue(storyData.description); }}
-                />
-              )}
-            </div>
-              <List
+        {storyData && (
+          <>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            onMouseEnter={() => setHoverField('title')}
+            onMouseLeave={() => setHoverField(null)}>
+            {editingField === 'title' ? (
+              <Input
                 size="small"
-                bordered
-                dataSource={storyData.scenes}
-                renderItem={(scene, index) => (
-                  <List.Item
-                    style={{
-                      cursor: 'pointer',
-                    background: currentSceneIndex === index ? '#e6f7ff' : 'transparent',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    }}
-                    onClick={() => handleSceneChange(index)}
-                  >
-                    <Text>{scene.scene_title}</Text>
-                  <Button
-                    icon={<EditOutlined />}
-                    size="small"
-                    style={{ marginLeft: 8 }}
-                    onClick={e => { e.stopPropagation(); handleEditClick(scene); }}
-                  />
-                  </List.Item>
-                )}
+                autoFocus
+                value={editValue}
+                onChange={e => setEditValue(e.target.value)}
+                onBlur={handleStoryEditSave}
+                onPressEnter={handleStoryEditSave}
+                style={{ width: 160 }}
               />
-            <div style={{ marginTop: 16, textAlign: 'center' }}>
-              <div
-                style={{
-                  border: '1px dashed #bbb',
-                  borderRadius: 4,
-                  padding: '8px 0',
-                  color: '#888',
-                  fontSize: 18,
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  transition: 'border-color 0.2s',
-                }}
-                onClick={() => setAddModalOpen(true)}
-                onMouseOver={e => (e.currentTarget.style.borderColor = '#1890ff')}
-                onMouseOut={e => (e.currentTarget.style.borderColor = '#bbb')}
-              >
-                增加场景
+            ) : (
+              <Title level={4} style={{ margin: 0, flex: 1, fontWeight: 500, fontSize: 18 }}>
+                {storyData.story_title}
+              </Title>
+            )}
+            {(hoverField === 'title' && editingField !== 'title') && (
+              <Button
+                icon={<EditOutlined />}
+                size="small"
+                type="text"
+                style={{ color: '#888' }}
+                onClick={() => { setEditingField('title'); setEditValue(storyData.story_title); }}
+              />
+            )}
+          </div>
+          <div style={{ color: '#aaa', fontSize: 13, marginBottom: 4 }}>位面序号: {storyData.story_id}</div>
+          <div style={{ position: 'relative', minHeight: 44, marginBottom: 8 }}
+            onMouseEnter={() => setHoverField('desc')}
+            onMouseLeave={() => setHoverField(null)}>
+            {editingField === 'desc' ? (
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 2 }}
+                autoFocus
+                value={editValue}
+                onChange={e => setEditValue(e.target.value)}
+                onBlur={handleStoryEditSave}
+                onPressEnter={handleStoryEditSave}
+                style={{ width: '100%', resize: 'none' }}
+                maxLength={100}
+              />
+            ) : (
+              <div style={{
+                position: 'relative',
+                overflow: 'hidden',
+                height: '44px',
+                lineHeight: '22px',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                textOverflow: 'ellipsis',
+                paddingRight: 0,
+                wordBreak: 'break-all',
+                fontSize: 14,
+                color: '#888'
+              }}>
+                {storyData.description}
               </div>
+            )}
+            {(hoverField === 'desc' && editingField !== 'desc') && (
+              <Button
+                icon={<EditOutlined />}
+                size="small"
+                type="text"
+                style={{ color: '#888', position: 'absolute', right: -20, bottom: 0, background: 'transparent', boxShadow: 'none', zIndex: 2 }}
+                onClick={() => { setEditingField('desc'); setEditValue(storyData.description); }}
+              />
+            )}
+          </div>
+            <List
+              size="small"
+              bordered
+              dataSource={storyData.scenes}
+              renderItem={(scene, index) => (
+                <List.Item
+                  style={{
+                    cursor: 'pointer',
+                  background: currentSceneIndex === index ? '#e6f7ff' : 'transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  }}
+                  onClick={() => handleSceneChange(index)}
+                >
+                  <Text>{scene.scene_title}</Text>
+                <Button
+                  icon={<EditOutlined />}
+                  size="small"
+                  style={{ marginLeft: 8 }}
+                  onClick={e => { e.stopPropagation(); handleEditClick(scene); }}
+                />
+                </List.Item>
+              )}
+            />
+          <div style={{ marginTop: 16, textAlign: 'center' }}>
+            <div
+              style={{
+                border: '1px dashed #bbb',
+                borderRadius: 4,
+                padding: '8px 0',
+                color: '#888',
+                fontSize: 18,
+                cursor: 'pointer',
+                userSelect: 'none',
+                transition: 'border-color 0.2s',
+              }}
+              onClick={() => setAddModalOpen(true)}
+              onMouseOver={e => (e.currentTarget.style.borderColor = '#1890ff')}
+              onMouseOut={e => (e.currentTarget.style.borderColor = '#bbb')}
+            >
+              增加场景
             </div>
-            <Modal
-              open={editModalOpen}
-              title="编辑场景信息"
-              onCancel={() => setEditModalOpen(false)}
-              onOk={handleEditSave}
-              okText="保存"
-              cancelText="关闭"
-              destroyOnHidden={true}
-            >
-              <Form form={form} layout="vertical" preserve={false}>
-                <Form.Item label="场景ID" name="scene_id" rules={[{ message: '请输入场景ID' }]}>
-                  <Input disabled />
-                </Form.Item>
-                <Form.Item label="场景标题" name="scene_title" rules={[{ required: true, message: '请输入场景标题' }]}>
-                  <Input />
-                </Form.Item>
-                <Form.Item label="起始节点ID" name="start_node_id" rules={[{ message: '请输入起始节点ID' }]}>
-                  <Input disabled />
-                </Form.Item>
-              </Form>
-            </Modal>
-            <Modal
-              open={addModalOpen}
-              title="新增场景"
-              onCancel={() => setAddModalOpen(false)}
-              onOk={handleAddScene}
-              okText="保存"
-              cancelText="关闭"
-            >
-              <Form form={addForm} layout="vertical">
-                <Form.Item label="场景标题" name="scene_title" rules={[{ required: true, message: '请输入场景标题' }]}>
-                  <Input placeholder="请输入场景标题" />
-                </Form.Item>
-              </Form>
-            </Modal>
-            </>
-          )}
+          </div>
+          <Modal
+            open={editModalOpen}
+            title="编辑场景信息"
+            onCancel={() => setEditModalOpen(false)}
+            onOk={handleEditSave}
+            okText="保存"
+            cancelText="关闭"
+            destroyOnHidden={true}
+          >
+            <Form form={form} layout="vertical" preserve={false}>
+              <Form.Item label="场景ID" name="scene_id" rules={[{ message: '请输入场景ID' }]}>
+                <Input disabled />
+              </Form.Item>
+              <Form.Item label="场景标题" name="scene_title" rules={[{ required: true, message: '请输入场景标题' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item label="起始节点ID" name="start_node_id" rules={[{ message: '请输入起始节点ID' }]}>
+                <Input disabled />
+              </Form.Item>
+            </Form>
+          </Modal>
+          <Modal
+            open={addModalOpen}
+            title="新增场景"
+            onCancel={() => setAddModalOpen(false)}
+            onOk={handleAddScene}
+            okText="保存"
+            cancelText="关闭"
+          >
+            <Form form={addForm} layout="vertical">
+              <Form.Item label="场景标题" name="scene_title" rules={[{ required: true, message: '请输入场景标题' }]}>
+                <Input placeholder="请输入场景标题" />
+              </Form.Item>
+            </Form>
+          </Modal>
+          </>
+        )}
       </Card>
     </div>
   );
