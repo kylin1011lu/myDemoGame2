@@ -4,6 +4,7 @@ import { serviceProto } from "./shared/protocols/serviceProto";
 import dotenv from 'dotenv';
 import { parseCurrentUser } from './models/parseCurrentUser';
 import { enableAuthentication } from './models/enableAuthentication';
+import { connectDB } from './config/database';
 dotenv.config();
 
 const isProd = process.env.NODE_ENV === 'production';
@@ -18,6 +19,8 @@ const server = new HttpServer(serviceProto, {
 
 // Initialize before server start
 async function init() {
+    // 先连接数据库
+    await connectDB();
     // Auto implement APIs
     await server.autoImplementApi(path.resolve(__dirname, 'api'));
 

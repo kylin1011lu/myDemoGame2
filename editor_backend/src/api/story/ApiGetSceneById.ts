@@ -1,10 +1,8 @@
 import { ApiCall } from "tsrpc";
 import { ReqGetSceneById, ResGetSceneById } from "../../shared/protocols/story/PtlGetSceneById";
 import { Scene } from "../../models/Scene";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqGetSceneById, ResGetSceneById>) {
-    await connectDB();
     const scene = await Scene.findOne({
         story_id: call.req.story_id,
         scene_id: call.req.scene_id

@@ -2,10 +2,8 @@ import { ApiCall } from "tsrpc";
 import { ReqUpdateSceneInfo, ResUpdateSceneInfo } from "../../shared/protocols/story/PtlUpdateSceneInfo";
 import { Scene } from "../../models/Scene";
 import { Story } from "../../models/Story";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqUpdateSceneInfo, ResUpdateSceneInfo>) {
-    await connectDB();
     const { story_id, scene_id, new_scene_id, scene_title, start_node_id } = call.req;
     // 如果scene_id和new_scene_id不同，校验新scene_id是否已存在
     if (scene_id !== new_scene_id) {

@@ -5,7 +5,7 @@ const SSO_VALID_TIME = 86400000 * 7;
 export class UserUtil {
     static users = [
         {
-            uid: 1,
+            uid: 10000,
             username: process.env.ADMIN_USER || 'admin',
             password: process.env.ADMIN_PASS || 'ABCDEF1011admin',
             roles: ['admin']

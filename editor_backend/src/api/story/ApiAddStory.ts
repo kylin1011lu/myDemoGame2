@@ -1,12 +1,9 @@
 import { ApiCall } from "tsrpc";
 import { ReqAddStory, ResAddStory } from "../../shared/protocols/story/PtlAddStory";
 import { Story } from "../../models/Story";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqAddStory, ResAddStory>) {
     try { 
-        await connectDB();
-
         const { story_title, description, story_type } = call.req;
 
         // 只获取下一个自增ID，不自增

@@ -2,10 +2,8 @@ import { ApiCall } from "tsrpc";
 import { ReqAddScene, ResAddScene } from "../../shared/protocols/story/PtlAddScene";
 import { Scene } from "../../models/Scene";
 import { Story } from "../../models/Story";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqAddScene, ResAddScene>) {
-  await connectDB();
   const { story_id, scene_title } = call.req;
 
   // 查找该story下已有的scene数量，决定新index

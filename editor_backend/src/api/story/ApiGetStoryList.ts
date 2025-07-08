@@ -1,10 +1,8 @@
 import { ApiCall } from "tsrpc";
 import { ReqGetStoryList, ResGetStoryList } from "../../shared/protocols/story/PtlGetStoryList";
 import { Story } from "../../models/Story";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqGetStoryList, ResGetStoryList>) {
-    await connectDB();
     const stories = await Story.find({}, { _id: 0 }).lean();
     call.succ({
         stories: stories.map(s => ({

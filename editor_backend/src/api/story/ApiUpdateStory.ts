@@ -1,10 +1,8 @@
 import { ApiCall } from "tsrpc";
 import { ReqUpdateStory, ResUpdateStory } from "../../shared/protocols/story/PtlUpdateStory";
 import { Story } from "../../models/Story";
-import { connectDB } from "../../config/database";
 
 export default async function (call: ApiCall<ReqUpdateStory, ResUpdateStory>) {
-  await connectDB();
   const { story_id, story_title, description } = call.req;
   const update: any = { updated_at: new Date() };
   if (story_title !== undefined) update.story_title = story_title;

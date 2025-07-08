@@ -21,7 +21,7 @@ const getServerUrl = () => {
 // Create Client
 export const client = new HttpClient(serviceProto, {
   server: getServerUrl(),
-  logger: console
+  logger: import.meta.env.MODE === 'development' ? console : undefined
 });
 
 // When server return a SSOToken, store it to localStorage
