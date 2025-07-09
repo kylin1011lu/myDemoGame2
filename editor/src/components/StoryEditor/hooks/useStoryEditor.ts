@@ -91,6 +91,9 @@ export function useStoryEditor(initialStoryData?: IStoryData) {
   const handleSceneChange = useCallback((index: number) => {
     if (!storyData || !storyData.scenes[index]) return;
     setCurrentSceneIndex(index);
+    if (!storyData.scenes[index].nodes || storyData.scenes[index].nodes.length == 0) {
+      return;
+    }
     setIsVisible(false);
     loadSceneById(storyData.story_id, storyData.scenes[index].scene_id, index);
   }, [storyData, loadSceneById]);
